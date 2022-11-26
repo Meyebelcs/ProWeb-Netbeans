@@ -607,7 +607,7 @@
                 <p class="texted-muted">Datos personales</p>
                
                 <div class="form-control">
-                    <input type="text" name="nombresE" value="<%=request.getSession().getAttribute("nombres")%>" onkeypress="return validaLetras(event);" >
+                    <input type="text" id="nombresE" name="nombresE" value="<%=request.getSession().getAttribute("nombres")%>" onkeypress="return validaLetras(event);" >
                     <i class="icon check-circle">
                         <svg 
                         xmlns="http://www.w3.org/2000/svg" 
@@ -629,7 +629,7 @@
                     <small class="small_register">Error message</small>
                 </div>
                 <div class="form-control">
-                    <input type="text" name="apellidosE" value="<%=request.getSession().getAttribute("apellidos")%>" onkeypress="return validaLetras(event);">
+                    <input type="text" id="apellidosE" name="apellidosE" value="<%=request.getSession().getAttribute("apellidos")%>" onkeypress="return validaLetras(event);">
                     <i class="icon check-circle">
                         <svg 
                         xmlns="http://www.w3.org/2000/svg" 
@@ -651,7 +651,7 @@
                     <small class="small_register  error">Error message</small>
                 </div>
                 <div class="form-control">
-                    <input type="email" name="CorreoE" value="<%=request.getSession().getAttribute("email")%>">
+                    <input type="email" id="CorreoE" name="CorreoE" value="<%=request.getSession().getAttribute("email")%>">
                     <i class="icon check-circle">
                         <svg 
                         xmlns="http://www.w3.org/2000/svg" 
@@ -674,7 +674,7 @@
                 </div>
                
                 <div class="form-control">
-                    <input type="password" name="ContraseñaE" value="<%=request.getSession().getAttribute("contraseña")%>">
+                    <input type="password" id="ContraseñaE" name="ContraseñaE" value="<%=request.getSession().getAttribute("contraseña")%>">
                     <i class="icon check-circle">
                         <svg 
                         xmlns="http://www.w3.org/2000/svg" 
@@ -697,7 +697,7 @@
                 </div>
 
                 <div class="form-control">
-                    <input type="password" name="ConfirmarContraseñaE" value="<%=request.getSession().getAttribute("contraseña")%>">
+                    <input type="password" id="ConfirmarContraseñaE" name="ConfirmarContraseñaE" value="<%=request.getSession().getAttribute("contraseña")%>">
                     <i class="icon check-circle">
                         <svg 
                         xmlns="http://www.w3.org/2000/svg" 
@@ -738,7 +738,7 @@
                         <path
                         d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm0-384c13.3 0 24 10.7 24 24v112c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"/></svg>
                     </i>
-                    <input type="date"  class="input_fecha" name="fechaE" value="<%=request.getSession().getAttribute("fechaNacimiento")%>">
+                    <input type="date"  id="fechaE" class="input_fecha" name="fechaE" value="<%=request.getSession().getAttribute("fechaNacimiento")%>">
                     <small class="small_fecha">Error message</small>
                 </div>
                 <div class="form-control">
@@ -762,7 +762,7 @@
                         d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm0-384c13.3 0 24 10.7 24 24v112c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"/></svg>
                     </i>
                     <small class="small_foto">Error message</small>
-                    <input accept="image/*" class="input_foto" type="file" name="fotoE" value="UImgController?id=${id}">
+                    <input accept="image/*" class="input_foto" type="file" id="fotoE" name="fotoE" value="null">
                 </div>
                 <button class=" btn btn-profile-info" type="subtmit" id="Save-Changes" >Guardar cambios</button>
                 

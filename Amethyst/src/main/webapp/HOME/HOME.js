@@ -9,13 +9,13 @@ const profileModal = document.querySelector('.see-profile');
 const EditprofileModal = document.querySelector('.customize-profile');
 const Editprofileclick = document.querySelector('#Edit-Info');
 
-const Nombres= document.getElementById("nombres");
-const Apellidos= document.getElementById("apellidos");
-const Correo= document.getElementById("Correo");
-const Contraseña= document.getElementById("Contraseña");
-const Contraseña2= document.getElementById("ConfirmarContraseña");
-const Fecha= document.getElementById("fecha");
-const Foto= document.getElementById("foto");
+const Nombres= document.getElementById("nombresE");
+const Apellidos= document.getElementById("apellidosE");
+const Correo= document.getElementById("CorreoE");
+const Contraseña= document.getElementById("ContraseñaE");
+const Contraseña2= document.getElementById("ConfirmarContraseñaE");
+const Fecha= document.getElementById("fechaE");
+const Foto= document.getElementById("fotoE");
 
 //-----------------------SPOILER FEED------------------------
 const acceptspoiler = document.querySelector('#spoiler-feed');
@@ -76,89 +76,66 @@ const closeEditProfileModal = (e) => {
         var regexNombres=/^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+(?: [a-zA-ZáéíóúÁÉÍÓÚñÑ]+)*$/;
         var regexE=/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))*$/;
 
-        if(Nombres.value.length<1){ //Valida solo incluir letras alfabeto español
-            alert("nombreserror");
+        if(Nombres.value.length<1){ //Valida solo incluir letras alfabeto español}
             setErrorFor(Nombres,"El campo no puede estar vacío");
         }else if(!regexNombres.test(Nombres.value)){
-            alert("nombreserror");
             setErrorFor(Nombres,"Carácteres no válidos");
         }else{
-            alert("nombressucces");
             setSuccesFor(Nombres);
             ok++;
         }
 
         if(Apellidos.value.length<1){ //Valida solo incluir letras alfabeto español
-            alert("apellidoserror");
             setErrorFor(Apellidos,"El campo no puede estar vacío");
         }else if(!regexNombres.test(Apellidos.value)){
-            alert("apellidoserror");
             setErrorFor(Apellidos,"Carácteres no válidos");
         }else{
-            alert("apellidossucces");
             setSuccesFor(Apellidos);
             ok++;
          }
 
          if(Correo.value.length<1){
-             alert("correoerror");
             setErrorFor(Correo,"El campo no puede estar vacío");
         }else if(!regexE.test(Correo.value)){ //evalua que haya texto, @, texto y luego .com
-            alert("correoerror");
             setErrorFor(Correo,"El correo electrónico no es válido");
         }else{
-            alert("correosucces");
             setSuccesFor(Correo);
             ok++;
         }
          
          if(Contraseña.value.length<1){
             setErrorFor(Contraseña,"El campo no puede estar vacío");
-            alert("contraseña error");
          }else if(!Contraseña.value.match(/[0-9]/)){
             setErrorFor(Contraseña,"La contraseña debe contener al menos un número");
-            alert("contraseña error");
          }else if(!Contraseña.value.match(/[A-Z]/)){
             setErrorFor(Contraseña,"La contraseña debe contener al menos una mayúscula");
-            alert("contraseña error");
          }else if(!Contraseña.value.match(/[a-z]/)){
             setErrorFor(Contraseña,"La contraseña debe contener al menos una minúscula");
-            alert("contraseña error");
          }else if(!Contraseña.value.match(/[¿/?/!/¡/./,/;/:/-/(/)/"/']/)){
             setErrorFor(Contraseña,"La contraseña debe contener al menos un signo de puntuación");
-            alert("contraseña error");
          }else if(Contraseña.value.length<8){
             setErrorFor(Contraseña,"La contraseña debe contener al menos 8 caracteres");
-            alert("contraseña error");
          }else{
             setSuccesFor(Contraseña);
-            alert("contraseña succes");
             ok++;
          }
 
          if(Contraseña2.value.length<1){
-            alert("contraseña2 error");
             setErrorFor(Contraseña2,"El campo no puede estar vacío");
          }else if(Contraseña2.value!==Contraseña.value){
-             alert("contraseña2 error");
             setErrorFor(Contraseña2,"Las contraseñas no coinciden");
          }else{
-             alert("contraseña succes");
             setSuccesFor(Contraseña2);
             ok++;
          }
 
          if(Fecha.value.length<1){
             setErrorFor(Fecha,"No seleccionó ninguna fecha");
-            alert("fechaerror");
          }else if(validateDate(Fecha.value)){
-             alert("fechaerror");
             setErrorFor(Fecha,"Fecha no válida");
         }else if(getAge(Fecha.value)<13){
-            alert("fechaerror");
             setErrorFor(Fecha,"Debe ser mayor a 13 años");
         }else{ 
-            alert("fechasucess");
             setSuccesFor(Fecha);
             ok++;
          }

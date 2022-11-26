@@ -90,7 +90,8 @@ public class UpdateUsuarioController extends HttpServlet {
             String nombres = request.getParameter("nombresE");
             String apellidos = request.getParameter("apellidosE");
             String fechaNacimiento = (String)request.getParameter("fechaE");
-            String email = request.getParameter("emailE");
+            String email = request.getParameter("CorreoE");
+            String contraseña = request.getParameter("ContraseñaE");
             Part filePart = request.getPart("fotoE");
             InputStream bytes;
             if(filePart!=null){
@@ -98,8 +99,7 @@ public class UpdateUsuarioController extends HttpServlet {
             }else{
                 bytes=null;
             }
-            String contraseña = request.getParameter("contra");
-            
+                        
             Usuario user = new Usuario(Integer.parseInt(id), nombres, apellidos, fechaNacimiento, email, bytes, usuario, contraseña, true);
             
             UsuarioDAO uDAO = new UsuarioDAO();
