@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -73,7 +74,7 @@
                                     <path
                                     d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm0-384c13.3 0 24 10.7 24 24v112c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"/></svg>
                                 </i>
-                                <small class="small_register  error">Error message</small>
+                                <small name="holiwi" class="small_register error">Error message</small>
                             </div>
                             <div class="form-control">
                                 <input type="password" placeholder="Contraseña" id="passwordLogin" name="contra">
@@ -87,11 +88,12 @@
                                     d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm0-384c13.3 0 24 10.7 24 24v112c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"/></svg>
                                 </i>
                                 <small class="small_register  error">Error message</small>
+                                <span style="color:red;">${error}</span>
                             </div>
                             <button type="submit" id="btn-login" >Entrar</button>
                         </form>
                         <!-- Registro -->
-                        <form action="UserRegister" id="register" class="formulario_register" method="POST">
+                        <form action="UserRegister" id="register" class="formulario_register" method="POST" enctype='multipart/form-data'>
                             <h2>Registrarse</h2>
                             <div class="form-control">
                                 <input type="text" id="nombres" placeholder="Nombres" name="nombres">
@@ -271,7 +273,7 @@
                                 <small class="small_foto">Error message</small>
                                 <input accept="image/*" class="input_foto" type="file" id="foto" name="fotoPerfil">
                             </div>
-                            <button type="subtmit"id="registerf" >Registrarse</button>
+                            <button class="help" type="subtmit"id="registerf" >Registrarse</button>
                             <!-- <p class="warnings" id="warnings">gtgt</p> -->
                         </form>
                     </div>  

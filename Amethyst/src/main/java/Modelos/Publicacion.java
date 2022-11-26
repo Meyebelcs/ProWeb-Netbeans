@@ -15,14 +15,16 @@ public class Publicacion {
     private boolean spoiler;
     private int idUsuario;
     private boolean activo;
+    private String fechaCreacion;
 
-    public Publicacion(int idPublicacion, String texto, String imagen, boolean spoiler, int idUsuario, boolean activo) {
+    public Publicacion(int idPublicacion, String texto, String imagen, boolean spoiler, int idUsuario, boolean activo, String fechaCreacion) {
         this.idPublicacion = idPublicacion;
         this.texto = texto;
         this.imagen = imagen;
         this.spoiler = spoiler;
         this.idUsuario = idUsuario;
         this.activo = activo;
+        this.fechaCreacion=fechaCreacion;
     }
 
     public int getIdPublicacion() {
@@ -73,6 +75,12 @@ public class Publicacion {
         this.activo = activo;
     }
     
-    
+    public String getfechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setfechaCreacion(String fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
     
 }

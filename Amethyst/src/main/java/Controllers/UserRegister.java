@@ -7,21 +7,25 @@ package Controllers;
 import DAO.UsuarioDAO;
 import Modelos.Usuario;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 /**
  *
  * @author denis
  */
 @WebServlet(name = "UserRegister", urlPatterns = {"/UserRegister"})
+@MultipartConfig(fileSizeThreshold=1024*1024,maxFileSize=1024*1024*5,maxRequestSize=1024*1024*5*5,location="/tmp")
 public class UserRegister extends HttpServlet {
 
     /**
@@ -81,28 +85,32 @@ public class UserRegister extends HttpServlet {
         String apellidos = request.getParameter("apellidos");
         String fechaNacimiento = (String)request.getParameter("fechaN");
         String email = request.getParameter("email");
-        String fotoPerfil = request.getParameter("fotoPerfil");
+        Part filePart = request.getPart("fotoPerfil");
+        InputStream bytes = filePart.getInputStream();
         String usuario = request.getParameter("usuario");
         String contraseña = request.getParameter("contra");
         
-        Usuario user = new Usuario(0, nombres, apellidos, fechaNacimiento, email, fotoPerfil, usuario, contraseña, true);
+        Usuario user = new Usuario(0, nombres, apellidos, fechaNacimiento, email, bytes, usuario, contraseña, true);
         
         UsuarioDAO uDAO = new UsuarioDAO();
         
        try {
+            boolean exists=uDAO.noRepeat(usuario);
+            
+            if(exists){
+                
+                request.setAttribute("error", "El nombre de usuario ya está en uso");
+                request.getRequestDispatcher("/LOGIN_REGISTER/LOGIN_REGISTER.jsp").forward(request, response);
+                
+            }else{
+            
             boolean result = uDAO.agregar(user);
             
-            if(result){
-               //response.sendRedirect(request.getContextPath()+"/LOGIN_REGISTER/LOGIN_REGISTER.jsp");
-               request.getRequestDispatcher("/LOGIN_REGISTER/LOGIN_REGISTER.jsp").forward(request, response);
+                if(result){
+                   request.getRequestDispatcher("/LOGIN_REGISTER/LOGIN_REGISTER.jsp").forward(request, response);
+                }
             }
-            
-            // Revisar que le usuario exista
-            
-            //response.sendRedirect("Vistas/principal.jsp");
-            //request.setAttribute("id", 1);
-            //request.getRequestDispatcher("principal.jsp").forward(request, response);
-            //processRequest(request, response);
+           
        } catch (SQLException ex) {
            Logger.getLogger(UserRegister.class.getName()).log(Level.SEVERE, null, ex);
            response.sendRedirect(request.getContextPath()+ "/idk.jsp");

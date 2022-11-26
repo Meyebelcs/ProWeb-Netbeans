@@ -29,9 +29,9 @@ const parrafo= document.getElementById("warnings");
 const User=document.getElementById("Usernamelogin");
 const pass=document.getElementById("passwordLogin");
 
-$(document).ready(function () {
 
-    /*$("#register").submit(function registerf() {
+
+    $("#register").submit(function registerf() {
             
         var ok=0;
 
@@ -90,7 +90,7 @@ $(document).ready(function () {
 
          if(Contraseña2.value.length<1){
             setErrorFor(Contraseña2,"El campo no puede estar vacío");
-         }else if(Contraseña2.value!=Contraseña.value){
+         }else if(Contraseña2.value!==Contraseña.value){
             setErrorFor(Contraseña2,"Las contraseñas no coinciden");
          }else{
             setSuccesFor(Contraseña2);
@@ -121,9 +121,9 @@ $(document).ready(function () {
              return true;
          }
          
-    });*/
+    });
     
-    $("#login").submit(function login() {
+   $("#login").submit(function login() {
             
         var ok=0;
 
@@ -147,8 +147,7 @@ $(document).ready(function () {
          }
          
     });
-    
-});
+
 
 
 

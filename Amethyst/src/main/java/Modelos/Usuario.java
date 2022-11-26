@@ -4,6 +4,8 @@
  */
 package Modelos;
 
+import java.io.InputStream;
+
 /**
  *
  * @author denis
@@ -14,12 +16,12 @@ public class Usuario {
     private String apellidos;
     private String fechaNacimiento;
     private String email;
-    private String fotoPerfil;
+    private InputStream fotoPerfil;
     private String usuario;
     private String contraseña;
     private boolean activo;
     
-     public Usuario(int idUsuario, String nombres, String apellidos, String fechaNacimiento, String email, String fotoPerfil, String usuario, String contraseña, boolean activo) {
+     public Usuario(int idUsuario, String nombres, String apellidos, String fechaNacimiento, String email, InputStream fotoPerfil, String usuario, String contraseña, boolean activo) {
         this.idUsuario = idUsuario;
         this.nombres = nombres;
         this.apellidos = apellidos;
@@ -71,11 +73,11 @@ public class Usuario {
         this.email = email;
     }
 
-    public String getFotoPerfil() {
+    public InputStream getFotoPerfil() {
         return fotoPerfil;
     }
 
-    public void setFotoPerfil(String fotoPerfil) {
+    public void setFotoPerfil(InputStream fotoPerfil) {
         this.fotoPerfil = fotoPerfil;
     }
 

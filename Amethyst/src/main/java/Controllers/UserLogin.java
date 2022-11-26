@@ -7,7 +7,9 @@ package Controllers;
 import DAO.UsuarioDAO;
 import Modelos.Usuario;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -17,6 +19,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -86,13 +89,26 @@ public class UserLogin extends HttpServlet {
             String contraseña = request.getParameter("contra");
             
             boolean exists = uDAO.ValidarUser(usuario, contraseña);
+            ResultSet datos = uDAO.consultar(usuario);
             
             if(exists){
+                HttpSession mySession=request.getSession();
+            
+                mySession.setAttribute("usuario", usuario);
+                mySession.setAttribute("id", datos.getInt("idUsuario"));
+                mySession.setAttribute("nombres", datos.getString("nombres"));
+                mySession.setAttribute("apellidos", datos.getString("apellidos"));
+                mySession.setAttribute("edad", datos.getString("edad"));
+                mySession.setAttribute("email", datos.getString("email"));
+                mySession.setAttribute("contraseña", datos.getString("contraseña"));
+                mySession.setAttribute("fechaNacimiento", datos.getString("fechaNacimiento"));
+                request.setAttribute("id",datos.getInt("idUsuario"));
                 request.setAttribute("usuario", usuario);
                 request.setAttribute("contraseña", contraseña);
-                response.sendRedirect(request.getContextPath()+ "/principal.jsp");
+                request.getRequestDispatcher("/HOME/HOME.jsp").forward(request, response);
             }else{
-                response.sendRedirect(request.getContextPath()+ "/idk.jsp");
+                request.setAttribute("error", "Las credenciales no son válidas");
+                request.getRequestDispatcher("/LOGIN_REGISTER/LOGIN_REGISTER.jsp").forward(request, response);
             }
             
         } catch (SQLException ex) {
