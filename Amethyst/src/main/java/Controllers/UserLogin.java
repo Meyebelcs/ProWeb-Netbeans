@@ -4,7 +4,14 @@
  */
 package Controllers;
 
+import DAO.ComentarioDAO;
+import DAO.MeGustaDAO;
+import DAO.PublicacionDAO;
 import DAO.UsuarioDAO;
+import Modelos.Comentario;
+import Modelos.ConsultaComentario;
+import Modelos.ConsultaPublicacion;
+import Modelos.MeGusta;
 import Modelos.Usuario;
 import java.io.IOException;
 import java.io.InputStream;
@@ -89,11 +96,14 @@ public class UserLogin extends HttpServlet {
             String contraseña = request.getParameter("contra");
             
             boolean exists = uDAO.ValidarUser(usuario, contraseña);
-            ResultSet datos = uDAO.consultar(usuario);
             
             if(exists){
                 HttpSession mySession=request.getSession();
+                PublicacionDAO pDAO = new PublicacionDAO();
+                ComentarioDAO cDAO = new ComentarioDAO();
+                MeGustaDAO mDAO = new MeGustaDAO();
             
+                ResultSet datos = uDAO.consultar(usuario);
                 mySession.setAttribute("usuario", usuario);
                 mySession.setAttribute("id", datos.getInt("idUsuario"));
                 mySession.setAttribute("nombres", datos.getString("nombres"));
@@ -105,6 +115,12 @@ public class UserLogin extends HttpServlet {
                 request.setAttribute("id",datos.getInt("idUsuario"));
                 request.setAttribute("usuario", usuario);
                 request.setAttribute("contraseña", contraseña);
+                 ArrayList<ConsultaPublicacion> publicaciones = pDAO.getPublicaciones();
+                 ArrayList<ConsultaComentario> comentarios = cDAO.getComentarios();
+                 ArrayList<MeGusta> meGustas = mDAO.getMeGusta();
+                request.setAttribute("meGustas", meGustas);
+                request.setAttribute("publicaciones", publicaciones);
+                request.setAttribute("comentarios", comentarios);
                 request.getRequestDispatcher("/HOME/HOME.jsp").forward(request, response);
             }else{
                 request.setAttribute("error", "Las credenciales no son válidas");

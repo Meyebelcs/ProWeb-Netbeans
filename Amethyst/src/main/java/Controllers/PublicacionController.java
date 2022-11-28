@@ -4,27 +4,37 @@
  */
 package Controllers;
 
+import DAO.ComentarioDAO;
+import DAO.MeGustaDAO;
 import DAO.PublicacionDAO;
+import Modelos.Comentario;
+import Modelos.ConsultaComentario;
+import Modelos.ConsultaPublicacion;
+import Modelos.MeGusta;
 import Modelos.Publicacion;
 import Modelos.Usuario;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 /**
  *
  * @author denis
  */
 @WebServlet(name = "Publicacion", urlPatterns = {"/Publicacion"})
+@MultipartConfig(fileSizeThreshold=10241024,maxFileSize=102410245,maxRequestSize=1024102455,location="/tmp")
 public class PublicacionController extends HttpServlet {
 
     public PublicacionController() {
@@ -83,27 +93,51 @@ public class PublicacionController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //processRequest(request, response);
-          HttpSession session=request.getSession(); 
+        HttpSession session=request.getSession(); 
         String id=session.getAttribute("id").toString();
-        int idPubli = Integer.parseInt(id);
-        String texto = request.getParameter("publi");
+        int idUser = Integer.parseInt(id);
+        String texto = request.getParameter("textoP");
+        String spoiler = request.getParameter("spoiler");
+        boolean isSpoiler=false;
+        if("on".equals(spoiler)){
+            isSpoiler=true;
+        }else if("off".equals(spoiler)){
+            isSpoiler=false;
+        }
+        boolean hasImage=false;
+        Part filePart = request.getPart("fotoP");
+        InputStream bytes;
+        long num= filePart.getSize();
+        if(filePart.getSize() > 1){
+           bytes = filePart.getInputStream();
+           hasImage=true;
+        }else{
+           bytes=null;
+           hasImage=false;
+        }
         
-        Publicacion post = new Publicacion(0, texto, "", false, idPubli, true, null);
+       Publicacion post = new Publicacion(0, texto, bytes, hasImage,isSpoiler,  idUser, true, null);
          
-        PublicacionDAO pDAO = new PublicacionDAO();
+       PublicacionDAO pDAO = new PublicacionDAO();
+        ComentarioDAO cDAO = new ComentarioDAO();
+        MeGustaDAO mDAO= new MeGustaDAO();
         
-         try {
-            boolean result = pDAO.agregar(post);
+        try {
+         boolean result = pDAO.agregar(post);
             
-            if(result){
-                ArrayList<Publicacion> publicaciones = pDAO.getPublicaciones();
-               request.setAttribute("publicaciones", publicaciones);
-               request.getRequestDispatcher("/HOME/HOME.jsp").forward(request, response);
-            }
+           if(result){
+             ArrayList<ConsultaPublicacion> publicaciones = pDAO.getPublicaciones();
+                 ArrayList<ConsultaComentario> comentarios = cDAO.getComentarios();
+                 ArrayList<MeGusta> meGustas = mDAO.getMeGusta();
+                request.setAttribute("meGustas", meGustas);
+             request.setAttribute("publicaciones", publicaciones);
+                request.setAttribute("comentarios", comentarios);
+             request.getRequestDispatcher("/HOME/HOME.jsp").forward(request, response);
+           }
             
        } catch (SQLException ex) {
-           Logger.getLogger(PublicacionController.class.getName()).log(Level.SEVERE, null, ex);
-           response.sendRedirect(request.getContextPath()+ "/idk.jsp");
+            Logger.getLogger(PublicacionController.class.getName()).log(Level.SEVERE, null, ex);
+            response.sendRedirect(request.getContextPath()+ "/idk.jsp");
        }
     }
 

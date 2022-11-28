@@ -10,6 +10,9 @@ Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
 :root{
+    --color-heart-active: #F90B0B;
+    --color-heart: #020101;
+    
     --primary-color-hue:252;
     --dark-color-lightness:17%;
     --light-color-lightness: 95%;
@@ -235,11 +238,15 @@ position: relative;
     font-size: 1rem;
 }
 
+.left .sidebar button{
+    margin-left: 1.5rem;
+    font-size: 1rem;
+}
 
 .left .sidebar .active {
     background: var(--color-light);
 }
-
+.left .sidebar .active button,
 .left .sidebar .active i,
 .left .sidebar .active h3 {
     color: var(--color-primary);
@@ -399,6 +406,70 @@ margin-bottom: 1rem;
     margin-right: 1rem ;
 }
 
+/*-----------------------MODAL EDIT PUBLICATION---------------*/
+.customize-publication-edit {
+    background: rgba(255, 255, 255, 0.5);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    text-align: center;
+    display: none;
+    place-items: center;
+    font-size: 0.9rem;
+    /*se activa y desactivan las notificaciones display: none;*/
+}
+.customize-publication-edit .card{
+    background: var(--color-white);
+    padding: 0.7rem;
+    border-radius: var(--card-border-radius);
+    width: 50%;
+    box-shadow: 0 0 1rem var(--color-primary);
+}
+.customize-publication-edit .publication-info{
+    margin-top: 1rem;
+}
+
+.photo-edit-post{
+
+
+    align-items: center;
+    justify-content: center;
+}
+
+.edit-pic{
+    width: 50%;
+    border-radius: var(--card-border-radius);
+    overflow: hidden;
+    position: relative;
+    margin-left: 25%;
+}
+
+/*-----------------------MODAL DELETE PUBLICATION---------------*/
+.customize-delete-post {
+    background: rgba(255, 255, 255, 0.5);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    text-align: center;
+    display: none;
+    place-items: center;
+    font-size: 0.9rem;
+    /*se activa y desactivan las notificaciones display: none;*/
+}
+.customize-delete-post .card{
+    background: var(--color-white);
+    padding: 0.7rem;
+    border-radius: var(--card-border-radius);
+    width: 30%;
+    box-shadow: 0 0 1rem var(--color-primary);
+}
+
 /*----------------FEED------------------------*/
 .middle .feeds .feed {
 background: var(--color-white);
@@ -427,12 +498,40 @@ line-height: 1.5;
     
 }
 
+.middle .feed .foto {
+    border-radius: var(--card-border-radius);
+    overflow: hidden;
+    margin: 0.7rem 0;
+    position: relative;
+    
+}
+
+
 .middle .feed .action-buttons {
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 1.4rem;
     margin: 0.6rem;
+    cursor:pointer;
+}
+
+.likeHeart{
+    color: var(--color-heart); 
+}
+
+.uil uil-heart{
+    width:100%;
+    height:100%;
+}
+
+.likedHeart{
+    color: #F90B0B;
+    width:100%;
+    height:100%;
+    width:2.5rem;
+    height:2.5rem;
+    background-color: transparent;
 }
 
 .middle .liked-by {
@@ -450,6 +549,7 @@ line-height: 1.5;
     margin-left: -0.6rem;
 }
 
+
 .middle .liked-by span:first-child{
     margin: 0;
 }
@@ -458,7 +558,87 @@ line-height: 1.5;
     margin-left: 0.5rem;
 }
 
+/*-----------------------MODAL DELETE COMMENT---------------*/
+.customize-delete-comment {
+    background: rgba(255, 255, 255, 0.5);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    text-align: center;
+    display: none;
+    place-items: center;
+    font-size: 0.9rem;
+    /*se activa y desactivan las notificaciones display: none;*/
+}
+.customize-delete-comment .card{
+    background: var(--color-white);
+    padding: 0.7rem;
+    border-radius: var(--card-border-radius);
+    width: 30%;
+    box-shadow: 0 0 1rem var(--color-primary);
+}
+
+/*-----------------------MODAL EDIT COMMENT---------------*/
+.customize-comment-edit {
+    background: rgba(255, 255, 255, 0.5);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    text-align: center;
+    display: none;
+    place-items: center;
+    font-size: 0.9rem;
+    /*se activa y desactivan las notificaciones display: none;*/
+}
+.customize-comment-edit .card{
+
+    background: var(--color-white);
+    padding: 0.7rem;
+    border-radius: var(--card-border-radius);
+    width: 50%;
+    box-shadow: 0 0 1rem var(--color-primary);
+}
+.customize-comment-edit .comment-info{
+    margin-top: 1rem;
+    height: 120px;
+}
+
+.textoC{
+    background: rgba(20, 16, 16, 0.24);
+    padding: 0.7rem;
+    border-radius: var(--card-border-radius);
+place-items: center;
+width: 80%;
+}
+.photo-edit-comment{
+
+    height: 120px;
+    align-items: center;
+    justify-content: center;
+}
+
 /*----------------SPOILER FEED-----------------*/
+
+
+.contenedor-nospoiler{
+    display:none;
+}
+
+.show{
+    display:block;
+    /*Desactiva el spoiler color transparente*/
+}
+
+.hidde{
+    display:none;
+    /*Desactiva el spoiler color transparente*/
+}
 
 .middle .feed .photo::after {
     content: '';
@@ -476,7 +656,29 @@ line-height: 1.5;
     display: none;
     */
     display: block;
+    
 }
+
+.middle .feed .foto::after {
+    
+      content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    transform: var(--photo-after);
+
+    transition: transform 0.2s;
+    background-color: rgba(64, 63, 67, 0.903);
+    /*Desactiva el spoiler color transparente*/
+    display: none;
+    
+    
+}
+
+
 /*
 .middle .feed .photo:hover::after {
     100% Para desactivar modo spoiler
@@ -494,6 +696,21 @@ line-height: 1.5;
    display: none;
     */
     display: block;
+    text-align: center;
+    
+}
+
+.middle .feed .foto .image-data {
+    position:absolute;
+    z-index: 1;
+    color: white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+     /*Desactiva el spoiler texto
+   display: none;
+    */
+    display: none;
     text-align: center;
     
 }
@@ -603,6 +820,20 @@ main .container .right {
     bottom: 0;
     right: 0;
 }
+
+/*--------SPOILER COMMENTS----*/
+.texto .commentspoiler{
+ background-color: #2e042c;
+ color:  #2e042c;
+ border-radius: 12px;
+}
+.texto .commentspoiler:hover{
+    background-color: var(--color-white);
+    color:  #000000;
+    border-radius: 12px;
+   }
+
+/*------------*/
 
 /*====================FRIEND REQUESTS===================*/
 .right .friend-requests{
@@ -725,6 +956,23 @@ main .container .right {
     display: none;
 }
 
+.customize-publication {
+    background: rgba(255, 255, 255, 0.5);
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    text-align: center;
+    display: grid;
+    place-items: center;
+    font-size: 0.9rem;
+    /*se activa y desactivan las notificaciones display: none;*/
+    display: none;
+}
+
+
 .see-profile {
     background: rgba(255, 255, 255, 0.5);
     width: 100vw;
@@ -749,6 +997,14 @@ main .container .right {
     box-shadow: 0 0 1rem var(--color-primary);
 }
 
+.customize-publication .card{
+    background: var(--color-white);
+    padding: 0.7rem;
+    border-radius: var(--card-border-radius);
+    width: 50%;
+    box-shadow: 0 0 1rem var(--color-primary);
+}
+
 .see-profile .card{
     background: var(--color-white);
     padding: 0.7rem;
@@ -761,9 +1017,48 @@ main .container .right {
     margin-top: 1rem;
 }
 
+.customize-publication .publication-info{
+    margin-top: 1rem;
+}
+
 .see-profile .profile-info{
     margin-top: 1rem;
 }
+
+.publi-info form button:hover{
+    background-color:  #36c3fe;
+    color: white;
+}
+
+.publi-info form h2{
+    font-size: 25px;
+    text-align: center;
+    margin-bottom: 5px;
+    color:#3d3d3d;
+}
+
+.publi-info form input{
+    width: 60%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 10px;
+    border:none;
+    border-radius: 4px;
+    background-color: #f2f2f2;
+    font-size: 16px;
+    outline: none;
+}
+
+.publi-info form input.textoP{
+    height: 120px;
+}
+
+.publi-info form input.input_foto{
+    margin-top: 15px;
+}
+
+
+
 /*---------------FORMULARIO PERFIL------------------*/
 
 .formulario_register{
@@ -776,6 +1071,7 @@ main .container .right {
     margin-top: 1rem;
     background: var(--color-primary);
     color:white;
+    margin:10px;
 }
 
 .profile-info form button:hover{
@@ -878,6 +1174,7 @@ main .container .right {
 
 
 
+
 /*------------footer-------------------*/
 footer{
 margin-top: 10rem;
@@ -961,11 +1258,18 @@ margin-top: 10rem;
 
 /*-------------COMENTS--------------------*/
 .contenedor-comentarios {
-    display: flex;
+    display: none;
     flex-wrap: wrap;
     flex-direction: column;
     width: 100%;
+    max-height: 0;
+
 }
+
+.contenedor-comentarios-height {
+    display: flex;
+    max-height: 100%;
+} 
 
 .contenedor-comentarios img {
     width: 100%;
@@ -1289,6 +1593,81 @@ MEDIA QUERIES FOR SMALL LAPTOPS AND BIG TABETS
     }
 }
 
+/*--------------FINAL BUTTONS------------------*/
+.final-buts{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    text-align: center;
+
+}
+.final-buttons{
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    display: flex;
+    text-align: center;
+    margin: 3%;
+    background-color: var(--color-secondary);
+    border-style: dashed;
+}
+
+/*--------------menu feed-------------------*/
+.menu-feed {
+    position: relative;
+    top: -20px;
+    width: 30px;
+    height: 30px;
+    background-color: #E9E9E9;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.feed .head .menu-feed {
+    box-shadow: 0 0 5px rgba(0, 0, 0, .4);
+}
+
+.feed .head:hover .menu-feed {
+    display: flex;
+}
+
+.publicacion-realizada .menu-feed {
+    display: flex;
+    right: 0;
+}
+
+.menu-feed .menu {
+    list-style: none;
+    position: absolute;
+    right: 100%;
+    background-color: #fff;
+    box-shadow: 0 0 5px 1px rgba(0, 0, 0, .2);
+    border-radius: 8px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all ease-in 200ms;
+}
+
+.menu-feed:hover .menu {
+    opacity: 1;
+    visibility: visible;
+}
+
+.menu-feed .menu a {
+    display: block;
+    padding: 7px 15px;
+    color: inherit;
+}
+
+.menu-feed .menu a:hover {
+    background-color: #E1E1E1;
+}
+
+
 
 /*=========================
 MEDIA QUERIES FOR SMALL TABLETS AND MOBILE PHONES
@@ -1335,4 +1714,6 @@ MEDIA QUERIES FOR SMALL TABLETS AND MOBILE PHONES
     .customize-profile .card{
         width: 92vw;
     }
-}
+    
+    }
+

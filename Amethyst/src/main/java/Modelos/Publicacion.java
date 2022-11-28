@@ -4,6 +4,8 @@
  */
 package Modelos;
 
+import java.io.InputStream;
+
 /**
  *
  * @author denis
@@ -11,20 +13,38 @@ package Modelos;
 public class Publicacion {
     private int idPublicacion;
     private String texto;
-    private String imagen;
+    private InputStream imagen;
+    private boolean hasImage;
     private boolean spoiler;
     private int idUsuario;
     private boolean activo;
     private String fechaCreacion;
 
-    public Publicacion(int idPublicacion, String texto, String imagen, boolean spoiler, int idUsuario, boolean activo, String fechaCreacion) {
+    public Publicacion(int idPublicacion, String texto, InputStream imagen, boolean hasImage, boolean spoiler, int idUsuario, boolean activo, String fechaCreacion) {
         this.idPublicacion = idPublicacion;
         this.texto = texto;
         this.imagen = imagen;
+        this.hasImage=hasImage;
         this.spoiler = spoiler;
         this.idUsuario = idUsuario;
         this.activo = activo;
         this.fechaCreacion=fechaCreacion;
+    }
+
+    public boolean isHasImage() {
+        return hasImage;
+    }
+
+    public void setHasImage(boolean hasImage) {
+        this.hasImage = hasImage;
+    }
+
+    public String getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(String fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 
     public int getIdPublicacion() {
@@ -43,11 +63,11 @@ public class Publicacion {
         this.texto = texto;
     }
 
-    public String getImagen() {
+    public InputStream getImagen() {
         return imagen;
     }
 
-    public void setImagen(String imagen) {
+    public void setImagen(InputStream imagen) {
         this.imagen = imagen;
     }
 

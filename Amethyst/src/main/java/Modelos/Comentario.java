@@ -15,19 +15,30 @@ public class Comentario {
     private int idUsuario;
     private int idPublicacion;
     private boolean activo;
-
-    public Comentario(int idComentario, String texto, boolean spoiler, int idUsuario, int idPublicacion, boolean activo) {
+    private String fechaCreacion;
+    
+    public Comentario(int idComentario, String texto, boolean spoiler, int idUsuario, int idPublicacion, boolean activo, String fechaCreacion) {
         this.idComentario = idComentario;
         this.texto = texto;
         this.spoiler = spoiler;
         this.idUsuario = idUsuario;
         this.idPublicacion = idPublicacion;
         this.activo = activo;
+        this.fechaCreacion=fechaCreacion;
+    }
+    
+    public String getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(String fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
     }
 
     public int getIdComentario() {
         return idComentario;
     }
+
 
     public void setIdComentario(int idComentario) {
         this.idComentario = idComentario;

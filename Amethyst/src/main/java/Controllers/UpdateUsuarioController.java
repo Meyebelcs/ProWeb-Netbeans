@@ -4,13 +4,20 @@
  */
 package Controllers;
 
+import DAO.ComentarioDAO;
+import DAO.MeGustaDAO;
+import DAO.PublicacionDAO;
 import DAO.UsuarioDAO;
+import Modelos.ConsultaComentario;
+import Modelos.ConsultaPublicacion;
+import Modelos.MeGusta;
 import Modelos.Usuario;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -85,6 +92,9 @@ public class UpdateUsuarioController extends HttpServlet {
        
             //processRequest(request, response);
              HttpSession session=request.getSession(); 
+             PublicacionDAO pDAO = new PublicacionDAO();
+             ComentarioDAO cDAO = new ComentarioDAO();
+             MeGustaDAO mDAO= new MeGustaDAO();
             String id=session.getAttribute("id").toString();
             String usuario=session.getAttribute("usuario").toString();
             String nombres = request.getParameter("nombresE");
@@ -94,7 +104,7 @@ public class UpdateUsuarioController extends HttpServlet {
             String contraseña = request.getParameter("ContraseñaE");
             Part filePart = request.getPart("fotoE");
             InputStream bytes;
-            if(filePart!=null){
+            if(filePart.getSize() > 1){
                 bytes = filePart.getInputStream();
             }else{
                 bytes=null;
@@ -121,6 +131,12 @@ public class UpdateUsuarioController extends HttpServlet {
                 request.setAttribute("id",datos.getInt("idUsuario"));
                 request.setAttribute("usuario", usuario);
                 request.setAttribute("contraseña", contraseña);
+                 ArrayList<ConsultaPublicacion> publicaciones = pDAO.getPublicaciones();
+                 ArrayList<ConsultaComentario> comentarios = cDAO.getComentarios();
+                 ArrayList<MeGusta> meGustas = mDAO.getMeGusta();
+                request.setAttribute("meGustas", meGustas);
+                request.setAttribute("publicaciones", publicaciones);
+                request.setAttribute("comentarios", comentarios);
                 request.getRequestDispatcher("/HOME/HOME.jsp").forward(request, response);
             }
             

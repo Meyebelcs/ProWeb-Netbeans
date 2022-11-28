@@ -20,14 +20,19 @@
     <link rel="stylesheet" href="HOME/HOME.css">
     </head>
     <body>
-            <nav>
+            
+     <nav>
+         
         <div class="container">
+            <a href="/" class="active"><img width="10" src="LOGIN_REGISTER/assets/Amethyst home.png" alt="Inicio"></a>
             <h2 class="log">
                 Amethyst
             </h2>
             <div class="search-bar">
-                <i class="uil uil-search"></i>
-                <input type="search" placeholder="Escribe aquí aquello que buscas">
+                <form action="BusquedaBasica" method="POST">
+                <input type="search" placeholder="Escribe aquí aquello que buscas" name="input-search">
+                <button><i class="uil uil-search"></i></button>
+                </form>
             </div>
             <div class="create">
                 <label class=" btn btn-primary" for="create-post">Create</label>
@@ -61,16 +66,21 @@
                 </a>
             <!---------------------SIDEBAR-------------->
             <div class="sidebar">
+                <form action="MasRecientes" method="POST">
                 <a class="menu-item active">
-                    <span><i class="uil uil-cloud-heart"></i></span> <h3>Más recientes</h3>
+                    <span><i class="uil uil-cloud-heart"></i></span> <button><h3>Más recientes</h3></button>
                 </a>
+                </form>
+                <form action="MasComentadas" method="POST">
                 <a class="menu-item">
-                    <span><i class="uil uil-envelope-heart"></i></span> <h3>Más comentadas</h3>
+                    <span><i class="uil uil-envelope-heart"></i></span> <button><h3>Más comentadas</h3></button>
                 </a>
+                </form>
+                <form action="MasVotadas" method="POST">
                 <a class="menu-item">
-                    <span><i class="uil uil-file-heart"></i></span> <h3>Más votadas</h3>
+                    <span><i class="uil uil-file-heart"></i></span> <button><h3>Más votadas</h3></button>
                 </a>
-
+                </form>
                 <a class="menu-item" id="notifications">
                     <span><i class="uil uil-bell"><small class="notification-count">9+</small></i></span> <h3>Notificaciones</h3>
                     <!------------------NOTIFICATION POPUP--------------------->
@@ -193,35 +203,448 @@
                     </div>
                 </div>
                 <!-----------------------------END OF STORIES--------------------->
-                <form action="Publicacion" class="create-post" method="POST">
+                <form action="" class="create-post" method="POST">
                     <div class="profile-photo">
                         <img src="UImgController?id=${id}">
                     </div>
-                    <input type="text" placeholder="¿Qué estás pensando?" id="create-post" name="publi">
-                    <button type="submit" class="btn btn-primary" id="btn-create-post" name="btn-create-post">Post</button>
+                    <input type="text" placeholder="¿Qué estás pensando?" id="create-post" name="publi" readonly>
+                    <!-- comment <button type="submit" class="btn btn-primary" id="btn-create-post" name="btn-create-post">Post</button>--> 
                 </form>
 
                 <!-----------------------FEEDS-------------------------->
                 <div class="feeds">
                      <!-----------------------FEED 1-------------------------->
-                       <div class="feed">
-                        <div class="head">
+                     <c:set var="spoilerCount" value="0"/>
+                     <c:set var="commentCount" value="0"/>
+                     
+                      <c:forEach items="${publicaciones}" var="publicacion" varStatus="index">
+                          <c:set var="isLiked" value="0"/>
+                          <c:set var="image" value="${publicacion.hasImage}"/>
+                        <c:choose>
+                          <c:when test="${(image == true)}">
+                             
+                    <div class="feed" >      
+                             <div class="head">
                             <div class="user">
                                 <div class="profile-photo">
-                                    <img src="../images/profile-13.jpg">
+                                    <img src="UImgController?id=${publicacion.idUsuario}">
                                 </div>
+                                <input type="hidden" value="${publicacion.idPublicacion}" id="input-idPubli${index.count}">
+                                <input type="hidden" value="${publicacion.hasImage}" id="input-hasImage${index.count}">
+                                <input type="hidden" value="${publicacion.spoiler}" id="input-spoiler${index.count}">
+                                <input type="hidden" value="${publicacion.texto}" id="input-text${index.count}">
+                                <input type="hidden" value="UImgController?id=${publicacion.idUsuario}" id="input-img${index.count}">
+                                
                                 <div class="ingo">
-                                    <h3>  Denisse Cardoza</h3>
-                                    <small>  FCFM, HACE 15 MINUTOS</small>
+                                    <h3>${publicacion.username}</h3>
+                                    <small>${publicacion.fechaCreacion}</small>
                                 </div>
                             </div>
                             <span class="edit">
                                 <i class="uil uil-ellipsis-h"></i>
+                                 <div class="menu-feed">
+                                    <i class="uil uil-pen"></i>
+                                     <c:set var = "idUP" value = "${publicacion.idUsuario}"/>
+                                     <c:set var = "usuario" value = "${id}"/>
+                                     <c:if test = "${idUP == usuario}">
+                                    <ul class="menu">
+                                        <li ><p id="btn-Edit-Post${index.count}" style="position:center;" >Editar</p></li>
+                                        <li ><p id="btn-Eliminar-Post${index.count}" style="position:center;" >Eliminar</p></li>
+                                    </ul>
+                                      </c:if>
+                                </div>
+                            </span>
+                        </div>
+                                 
+                          <c:set var="spoiler" value="${publicacion.spoiler}"/>
+                        <c:choose>
+                          <c:when test="${(spoiler == true)}">  
+                              
+                            
+                          
+                       <div class="contenedor-spoiler">     
+                        <form class="photo" id="photo-spoiler">
+                            
+                            <img src="PImgController?id=${publicacion.idPublicacion}">
+                            <div id="image-data" class="image-data">
+                               
+                                <h2 class="image-data_title">Spoiler</h2>
+                                <p class="image-data_text">¿Estás seguro de querer ver este contenido?</p>
+                                <label class=" btn btn-primary btn-spoiler" id="spoiler-feed" onclick="noSpoiler(${spoilerCount})">Aceptar</label>
+                                
+                            </div>
+                        </form>
+                       </div>  
+                         
+                                  <c:set var="spoilerCount" value="${spoilerCount+1}"/>
+                                
+                       <div class="contenedor-nospoiler">     
+                        <form class="foto" id="photo-spoiler">
+                            
+                            <img src="PImgController?id=${publicacion.idPublicacion}">
+                        
+                        </form>
+                       </div>  
+                        </c:when>
+                    <c:otherwise> 
+                        
+                        <div class="foto" id="photo-spoiler">
+                            <img src="PImgController?id=${publicacion.idPublicacion}">
+                            <div id="image-data" class="image-data">
+                                
+                            </div>
+                        </div>
+                            
+                    </c:otherwise>
+                    </c:choose>
+
+                        <div class="action-buttons">
+                            <div class="interaction-buttons"> 
+                                <c:set var = "idLiked" value = "0"/>
+                                <c:forEach items="${meGustas}" var="meGusta">
+                                <c:set var = "idLike" value = "${meGusta.idUsuario}"/>
+                                <c:set var = "idPubliML" value = "${meGusta.idPublicacion}"/>
+                                <c:set var = "idPubliL" value = "${publicacion.idPublicacion}"/>
+                                <c:set var = "usuarioL" value = "${id}"/>
+                                <c:if test="${idLike == usuarioL}">
+                                    <c:if test="${idPubliML == idPubliL}">
+                                    <c:set var="isLiked" value="${isLiked+1}"/>
+                                    <c:set var = "idLiked" value = "${meGusta.idMeGusta}"/>
+                                    </c:if> 
+                                    
+                                </c:if>  
+                                </c:forEach>
+                                
+                                
+                                <c:choose>
+                                <c:when test="${isLiked > 0}"> 
+                                    <form action="DeleteMeGustaController" method="POST">
+                                <input type="hidden" value="${publicacion.idPublicacion}" name="input-idPubliL">
+                                <input type="hidden" value="${idLiked}" name="input-idLike">
+                                <button type="submit" id="likeheart${index.count}"><span class="likedHeart"><i class="uil uil-heart"></i></span></button>
+                                <span><i class="uil uil-comment-dots"></i></span>
+                                <span><i class="uil uil-share"></i></span>
+                                </form>
+                                </c:when>
+                                <c:otherwise> 
+                                    <form action="MeGustaController" method="POST">
+                                <input type="hidden" value="${publicacion.idPublicacion}" name="input-idPubliL">
+                                <button type="submit" class="likeHeart" id="likeheart${index.count}"><i class="uil uil-heart"></i></button>
+                                <span><i class="uil uil-comment-dots"></i></span>
+                                <span><i class="uil uil-share"></i></span>
+                                </form>
+                                </c:otherwise>
+                                </c:choose>
+                            </div>
+                            <div class="bookmark">
+                                <span><i class="uil uil-bookmark"></i></span>
+                            </div>
+                        </div>
+                        
+                        <div class="liked-by">
+                            <p>Le gusta a <b>${publicacion.meGusta}</b> personas</p>
+                        </div>
+
+                        <div class="caption">
+                        <p class="hash-tag" > <b>${publicacion.username}</b><b>  </b>${publicacion.texto} </p>
+                        </div>
+
+                        
+                        <div class="comments text-muted" style="cursor: pointer;" id="showComments${index.count}" onclick="MostrarComentarios(${index.index})">Ver los ${publicacion.comentarios} comentarios</div>
+                        
+                        <!-----------------------COMENTARIOS----------------------->
+                       
+                        <section class="contenedor-comentarios">
+                            <div class="comentarios-usuarios">
+                                <!-- comentario principal -->
+                                 <c:forEach items="${comentarios}" var="comentario" varStatus="indexC">
+                                         <c:set var="commentPubli" value="${comentario.idPublicacion}"/>
+                                         <c:set var="PubliId" value="${publicacion.idPublicacion}"/>
+                                            <c:if test="${(commentPubli == PubliId)}">
+                                <div class="comentario-principal-usuario">
+                                    <div class="avatar">
+                                        <img src="UImgController?id=${comentario.idUsuario}" alt="img">
+                                        </div>
+                                    <div class="comentario">
+                                        <div class="usuario-comentario">
+                                            <div class="texto">
+                                            <input type="hidden" value="${comentario.idComentario}" id="input-idC${commentCount}">
+                                            <input type="hidden" value="${comentario.texto}" id="input-textC${commentCount}">
+                                            <input type="hidden" value="${comentario.spoiler}" id="input-spoilerC${commentCount}">
+                                            <input type="hidden" value="${comentario.idPublicacion}" id="input-idPC${commentCount}">
+                                                <a href="#" title="" class="nombre-usuario">${comentario.usuario}</a> 
+                                                  <c:set var="spoiler" value="${comentario.spoiler}"/>
+                                                    <c:choose>
+                                                     <c:when test="${(spoiler == true)}">  
+                                                        <p class="commentspoiler">${comentario.texto}</p>
+                                                     </c:when>
+                                                     <c:otherwise> 
+                                                        <p class="">${comentario.texto}</p>
+                                                     </c:otherwise>
+                                                     </c:choose>   
+                                                <div class="menu-comentario">
+                                                    <i class="uil uil-pen"></i>
+                                                    <c:set var = "idUC" value = "${comentario.idUsuario}"/>
+                                                    <c:set var = "usuario" value = "${id}"/>
+                                                    <c:if test = "${idUC == usuario}">
+                                                    <ul class="menu">
+                                                        <li><a id="btn-Edit-Comment${commentCount}">Editar</a></li>
+                                                        <li><a id="btn-Eliminar-Comment${commentCount}">Eliminar</a></li>
+                                                    </ul>
+                                                    </c:if>
+                                                </div>
+                                            </div>
+                                            <div class="botones-comentario">
+                                                <span class="tiempo-comentario">
+                                                    ${comentario.fechaCreacion}
+                                                </span>
+                                            </div>
+                                        </div>
+                                            
+                                    </div>
+                                </div>
+                                    <c:set var="commentCount" value="${commentCount+1}"/>
+                                 
+                              </c:if>
+                              </c:forEach>      
+                        
+                                <div class="comentar-publicacion">
+                                    <div class="avatar">
+                                        <img src="UImgController?id=${id}" alt="img">
+                                    </div>
+                                   <form action="ComentarioController" method="post" class="comentar-comentario">
+                                       <input type="hidden" name="idCP" value="${publicacion.idPublicacion}">
+                                       <input type="text" name="textC" value="" placeholder="">
+                                       <button type="submit" class="btn btn-primary">
+                                        <center>
+                                        <i class="uil uil-message"></i>
+                                        </center>
+                                       </button>
+                                        <div style="margin-left: 10px;">
+                                        <p>Spoiler</p>
+                                        <center>
+                                        <input class="input_spoiler" type="checkbox" id="spoilerC" name="spoilerC">
+                                        </center>
+                                       </div>
+                                   </form>
+                                  
+
+                                </div>
+                                
+                            </div>
+                        
+                            
+                        </section>
+                        
+
+                    </div>
+                                  
+                             
+                       
+                     
+                    </c:when>
+                    <c:otherwise> 
+                        
+                      <div class="feed" id="${publicacion.idPublicacion}">
+                        <div class="head">
+                            <div class="user">
+                                <div class="profile-photo">
+                                    <img src="UImgController?id=${publicacion.idUsuario}">
+                                    
+                                <input type="hidden" value="${publicacion.idPublicacion}" id="input-idPubli${index.count}">
+                                <input type="hidden" value="${publicacion.hasImage}" id="input-hasImage${index.count}">
+                                <input type="hidden" value="${publicacion.spoiler}" id="input-spoiler${index.count}">
+                                <input type="hidden" value="${publicacion.texto}" id="input-text${index.count}">
+                                <input type="hidden" value="UImgController?id=${publicacion.idUsuario}" id="input-img${index.count}">
+                                                                    
+                                </div>
+                                <div class="ingo">
+                                    <h3>${publicacion.username}</h3>
+                                    <small>${publicacion.fechaCreacion}</small>
+                                </div>
+                                
+                            </div>
+                            <span class="edit">
+                                <i class="uil uil-ellipsis-h"></i>
+                                <div class="menu-feed">
+                                    <i class="uil uil-pen"></i>
+                                    <c:set var = "idUP" value = "${publicacion.idUsuario}"/>
+                                     <c:set var = "usuario" value = "${id}"/>
+                                     <c:if test = "${idUP == usuario}">
+                                    <ul class="menu">
+                                        <li ><p id="btn-Edit-Post${index.count}"  style="position:center;" >Editar</p></li>
+                                        <li ><p id="btn-Eliminar-Post${index.count}" style="position:center;" >Eliminar</p></li>
+                                    </ul>
+                                    </c:if>
+                                </div>
+                            </span>
+                        </div>
+                        
+                        <div class="caption">
+                            <br><p class="hash-tag"><b>                          </b> ${publicacion.texto}</p>
+                        </div>
+
+                        
+
+                        <div class="action-buttons">
+                            <div class="interaction-buttons">
+                                <c:set var = "idLiked" value = "0"/>
+                                 <c:forEach items="${meGustas}" var="meGusta">
+                                <c:set var = "idLike" value = "${meGusta.idUsuario}"/>
+                                <c:set var = "idPubliML" value = "${meGusta.idPublicacion}"/>
+                                <c:set var = "idPubliL" value = "${publicacion.idPublicacion}"/>
+                                <c:set var = "usuarioL" value = "${id}"/>
+                                <c:if test="${idLike == usuarioL}">
+                                    <c:if test="${idPubliML == idPubliL}">
+                                    <c:set var="isLiked" value="${isLiked+1}"/>
+                                    <c:set var = "idLiked" value = "${meGusta.idMeGusta}"/>
+                                    </c:if> 
+                                    
+                                </c:if>  
+                                </c:forEach>
+                                
+                                
+                                <c:choose>
+                                <c:when test="${isLiked > 0}"> 
+                                    <form action="DeleteMeGustaController" method="POST">
+                                <input type="hidden" value="${publicacion.idPublicacion}" name="input-idPubliL">
+                                <input type="hidden" value="${idLiked}" name="input-idLike">
+                                <button type="submit" class="likedHeart" id="likeheart${index.count}"><i class="uil uil-heart"></i></button>
+                                <span><i class="uil uil-comment-dots"></i></span>
+                                <span><i class="uil uil-share"></i></span>
+                                </form>
+                                </c:when>
+                                <c:otherwise> 
+                                    <form action="MeGustaController" method="POST">
+                                <input type="hidden" value="${publicacion.idPublicacion}" name="input-idPubliL">
+                                <button type="submit" class="likeHeart" id="likeheart${index.count}"><i class="uil uil-heart"></i></button>
+                                <span><i class="uil uil-comment-dots"></i></span>
+                                <span><i class="uil uil-share"></i></span>
+                                </form>
+                                </c:otherwise>
+                                </c:choose>
+                            </div>
+                            <div class="bookmark">
+                                <span><i class="uil uil-bookmark"></i></span>
+                            </div>
+                        </div>
+                        
+                        <div class="liked-by">
+                            <p>Le gusta a <b>${publicacion.meGusta}</b> personas</p>
+                        </div>
+
+                        <div class="comments text-muted" style="cursor: pointer;" id="showComments">Ver los ${publicacion.comentarios} comentarios</div>
+
+                        <!-----------------------COMENTARIOS----------------------->
+                       
+                        <section class="contenedor-comentarios">
+                            <div class="comentarios-usuarios">
+                                <!-- comentario principal -->
+                                 <c:forEach items="${comentarios}" var="comentario" varStatus="index">
+                                         <c:set var="commentPubli" value="${comentario.idPublicacion}"/>
+                                         <c:set var="PubliId" value="${publicacion.idPublicacion}"/>
+                                            <c:if test="${(commentPubli == PubliId)}">
+                                <div class="comentario-principal-usuario">
+                                    <div class="avatar">
+                                        <img src="UImgController?id=${comentario.idUsuario}" alt="img">
+                                    </div>
+                                    <div class="comentario">
+                                        <div class="usuario-comentario">
+                                            <div class="texto">
+                                                <a href="#" title="" class="nombre-usuario">${comentario.usuario}</a> 
+                                                  <c:set var="spoiler" value="${comentario.spoiler}"/>
+                                                    <c:choose>
+                                                     <c:when test="${(spoiler == true)}">  
+                                                        <p class="commentspoiler">${comentario.texto}</p>
+                                                     </c:when>
+                                                     <c:otherwise> 
+                                                        <p class="">${comentario.texto}</p>
+                                                     </c:otherwise>
+                                                     </c:choose>   
+                                                <div class="menu-comentario">
+                                                    <i class="uil uil-pen"></i>
+                                                    <c:set var = "idUC" value = "${comentario.idUsuario}"/>
+                                                    <c:set var = "usuario" value = "${id}"/>
+                                                    <c:if test = "${idUC == usuario}">
+                                                    <ul class="menu">
+                                                        <li><a id="btn-Edit-Comment${commentCount}">Editar</a></li>
+                                                        <li><a id="btn-Eliminar-Comment${commentCount}+">Eliminar</a></li>
+                                                    </ul>
+                                                    </c:if>
+                                                </div>
+                                            </div>
+                                            <div class="botones-comentario">
+                                                <span class="tiempo-comentario">
+                                                    ${comentario.fechaCreacion}
+                                                </span>
+                                            </div>
+                                        </div>
+                                            
+                                    </div>
+                                </div>
+                                 
+                              </c:if>
+                              </c:forEach>      
+                        
+                                <div class="comentar-publicacion">
+                                    <div class="avatar">
+                                        <img src="UImgController?id=${id}" alt="img">
+                                    </div>
+                                   <form action="ComentarioController" method="post" class="comentar-comentario">
+                                       <input type="hidden" name="idCP" value="${publicacion.idPublicacion}">
+                                       <input type="text" name="textC" value="" placeholder="">
+                                       <button type="submit" class="btn btn-primary">
+                                        <center>
+                                        <i class="uil uil-message"></i>
+                                        </center>
+                                       </button>
+                                        <div style="margin-left: 10px;">
+                                        <p>Spoiler</p>
+                                        <center>
+                                        <input class="input_spoiler" type="checkbox" id="spoilerC" name="spoilerC">
+                                        </center>
+                                       </div>
+                                   </form>
+                                  
+
+                                </div>
+                                
+                            </div>
+                        
+                            
+                        </section>
+
+                    </div>
+                    
+                    </c:otherwise>
+                    </c:choose>
+                 </c:forEach>
+                     
+                      <div class="feed">
+                        <div class="head">
+                            <div class="user">
+                                <div class="profile-photo">
+                                    <img src="HOME/images/profile-9.jpg">
+                                </div>
+                                <div class="ingo">
+                                    <h3>  Ryan Mortdecai</h3>
+                                    <small>  THE WEEKND, HACE 3 DÍAS</small>
+                                </div>
+                            </div>
+                            <span class="edit">
+                                <i class="uil uil-ellipsis-h"></i>
+                                <div class="menu-feed">
+                                    <i class="uil uil-pen"></i>
+                                    <ul class="menu">
+                                        <li><a href="">Editar</a></li>
+                                        <li><a href="">Eliminar</a></li>
+                                    </ul>
+                                </div>
                             </span>
                         </div>
 
-                        <div class="photo" id="photo-spoiler">
-                            <img src="../images/feed-1.jpg">
+                        <div class="photo">
+                             <img src="HOME/images/feed-7.jpg">
                             <div id="image-data" class="image-data">
                                
                                 <h2 class="image-data_title">Spoiler</h2>
@@ -233,7 +656,7 @@
 
                         <div class="action-buttons">
                             <div class="interaction-buttons">
-                                <span><i class="uil uil-heart"></i></span>
+                                <span class="likedHeart" id="likeheart"><i class="uil uil-heart"></i></span>
                                 <span><i class="uil uil-comment-dots"></i></span>
                                 <span><i class="uil uil-share"></i></span>
                             </div>
@@ -243,32 +666,33 @@
                         </div>
                         
                         <div class="liked-by">
-                            <span><img src="../images/profile-15.jpg"></span>
-                            <span><img src="../images/profile-12.jpg"></span>
-                            <span><img src="../images/profile-11.jpg"></span>
-                            <p>Le gusta a <b>Boing Eguia</b> y <b>57 personas más</b> </p>
+                            <span><img src="HOME/images/profile-6.jpg"></span>
+                            <span><img src="HOME/images/profile-8.jpg"></span>
+                            <span><img src="HOME/images/profile-12.jpg"></span>
+                            <p>Le gusta a <b>Gal Vamp</b> y <b>12 personas más</b> </p>
                         </div>
 
-                        <div class="caption">
-                        <p> <b>Denisse Cardoza</b> Un poco del festival de Halloween <span
-                            class="harsh-tag">#Halloween</span></p>
+                          <div class="caption">
+                        <p class="hash-tag"> <b>Denisse Cardoza</b> Un poco del festival de Halloween #Halloween #FCFM #Night #Halloween </p>
                         </div>
-                        <div class="comments text-muted">Ver los 15 comentarios</div>
 
-                        <!-----------------------COMENTARIOS----------------------->
-                        <section class="contenedor-comentarios">
+                       
+                        
+                        <div class="comments text-muted" style="cursor: pointer;" id="showComments">Ver los 15 comentarios</div>
+                         <!-----------------------COMENTARIOS----------------------->
+                         <section class="contenedor-comentarios">
                            
                             <div class="comentarios-usuarios">
                                 <!-- comentario principal -->
                                 <div class="comentario-principal-usuario">
                                     <div class="avatar">
-                                        <img src="../images/profile-5.jpg" alt="img">
+                                        <img src="HOME/images//profile-5.jpg" alt="img">
                                     </div>
                                     <div class="comentario">
                                         <div class="usuario-comentario">
                                             <div class="texto">
                                                 <a href="#" title="" class="nombre-usuario"> Kevin Mora</a> 
-                                                <p>De verdad es la FCFM? no parece :0</p> 
+                                                <p class="commentspoiler">De verdad es la FCFM? no parece :0</p> 
                                                 <div class="menu-comentario">
                                                     <i class="uil uil-pen"></i>
                                                     <ul class="menu">
@@ -296,7 +720,7 @@
                                             <!-- sub-comentario uno -->
                                             <div class="comentario-principal-usuario">
                                                 <div class="avatar">
-                                                    <img src="../images/profile-3.jpg" alt="img">
+                                                    <img src="HOME/images/profile-3.jpg" alt="img">
                                                 </div>
                                                 <div class="comentario">
                                                     <div class="usuario-comentario">
@@ -335,7 +759,7 @@
                         
                                 <div class="comentar-publicacion">
                                     <div class="avatar">
-                                        <img src="../images/profile-13.jpg" alt="img">
+                                        <img src="HOME/images/profile-13.jpg" alt="img">
                                     </div>
                                    <form action="#" method="post" class="comentar-comentario">
                                        <input type="text" name="" value="" placeholder="">
@@ -349,11 +773,16 @@
                                 
                             </div>
                         </section>
-
                     </div>
+                     
+                       
                     <!------------------------------END OF FEED--------------------------->                 
                 </div>
                 <!------------------------------END OF FEEDS------------------->
+                <div class="final-buts">
+                    <label class=" btn btn-primary final-buttons" id="Anterior">Anterior</label>
+                    <label class=" btn btn-primary final-buttons" id="Siguiente">Siguiente</label>
+                </div>
             </div>
             <!--============================END OD MIDDLE==============================-->
 
@@ -776,7 +1205,212 @@
         </div>
     </div>
 </div>
+<!--=================MAKE PUBLICATION====================-->
 
+<div class="customize-publication">
+    <div class="card">
+        <!------------- PUBLICATION INFO-------------->
+        <div class="publi-info">
+           
+            <form action="Publicacion" id="form-publication" method ="post" class="formulario_register" enctype='multipart/form-data'>
+
+                <h2 class="texted-muted">Crear publicación</h2>
+               
+                <div class="form-control">
+                    <input type="text" id="textoP" name="textoP" class="textoP" placeholder="¿Qué estás pensando?">
+                    <i class="icon check-circle">
+                        <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="1em" 
+                        height="1em" 
+                        viewBox="0 0 512 512">
+                        <path 
+                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm113-303L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
+                    </i>
+                    <i class="icon exclamation-circle">
+                        <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="1em" 
+                        height="1em" 
+                        viewBox="0 0 512 512">
+                        <path
+                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm0-384c13.3 0 24 10.7 24 24v112c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"/></svg>
+                    </i>
+                    <small class="small_register">Error message</small>
+                </div>
+                
+                <div class="form-control">
+                    <p>Foto</p>
+                    <i class="icon_foto check-circle">
+                        <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="1em" 
+                        height="1em" 
+                        viewBox="0 0 512 512">
+                        <path 
+                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm113-303L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
+                    </i>
+                    <i class="icon_foto exclamation-circle">
+                        <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="1em" 
+                        height="1em" 
+                        viewBox="0 0 512 512">
+                        <path
+                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm0-384c13.3 0 24 10.7 24 24v112c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"/></svg>
+                    </i>
+                    <small class="small_foto">Error message</small>
+                    <input accept="image/*" class="input_foto" type="file" id="fotoP" name="fotoP" value="null">
+                    <p>Spoiler</p>
+                    <input class="input_spoiler" type="checkbox" id="spoiler" name="spoiler">
+                </div>
+                <button class=" btn btn-profile-info" type="subtmit" id="publish" >Publicar</button>
+                 <button class=" btn btn-profile-info" type="button" id="Close" >Cerrar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--=================EDIT PUBLICATION====================-->
+
+<div class="customize-publication-edit">
+    <div class="card">
+        <!------------- PUBLICATION INFO-------------->
+        <div class="publi-info">
+           
+            <form action="UpdatePublicacionControler" id="form-Editpublication" method ="post" class="formulario_register" enctype='multipart/form-data'>
+
+                <h2 class="texted-muted">Editar publicación</h2>
+                 <input type="hidden" id="idPubliEP" name="idPubliEP">
+                <div class="form-control">
+                    <input type="text" id="textoEP" name="textoEP" class="textoEP" placeholder="aqui va el texto o vacio segun la base de datos">
+                    <i class="icon check-circle">
+                        <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="1em" 
+                        height="1em" 
+                        viewBox="0 0 512 512">
+                        <path 
+                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm113-303L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
+                    </i>
+                    <i class="icon exclamation-circle">
+                        <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="1em" 
+                        height="1em" 
+                        viewBox="0 0 512 512">
+                        <path
+                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm0-384c13.3 0 24 10.7 24 24v112c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"/></svg>
+                    </i>
+                    <small class="small_register">Error message</small>
+                </div>
+
+                <div class="photo-edit-post">
+                    <img id="imgEP" class="edit-pic" src="/HOME/images/feed-1.jpg">
+                </div>
+                
+                <div class="form-control">
+                    <i class="icon_foto check-circle">
+                        <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="1em" 
+                        height="1em" 
+                        viewBox="0 0 512 512">
+                        <path 
+                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm113-303L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
+                    </i>
+                    <i class="icon_foto exclamation-circle">
+                        <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="1em" 
+                        height="1em" 
+                        viewBox="0 0 512 512">
+                        <path
+                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm0-384c13.3 0 24 10.7 24 24v112c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"/></svg>
+                    </i>
+                    <small class="small_foto">Error message</small>
+                    <input accept="image/*" class="input_foto" type="file" id="fotoEP" name="fotoEP" value="null">
+                    <p>Spoiler</p>
+                    <input class="input_spoiler" type="checkbox" id="spoilerEditP" name="spoilerEditP">
+                </div>
+                <button class=" btn btn-profile-info" type="subtmit" id="publish" >Guardar</button>
+                 <button class=" btn btn-profile-info" type="button" id="EditClose" >Cancelar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--=================DELETE POST====================-->
+<div class="customize-delete-post">
+    <div class="card">
+        <form action="DeletePublicationController" method="POST">
+            <h2>Eliminar Publicación</h2>
+            <input type="hidden" id="idPubliDP" name="idPubliDP">
+            <p class="texted-muted">¿Seguro que desea eliminar esta publicación?</p>
+
+            <button class=" btn btn-profile-info" type="subtmit" id="Delete-post" >Eliminar</button>
+            <button class=" btn btn-profile-info" type="button" id="DeleteClose" >Cancelar</button>
+        </form>
+    </div>
+</div>
+
+<!--=================DELETE COMMENT====================-->
+<div class="customize-delete-comment">
+    <div class="card">
+         <form action="DeleteCommentController" method="POST">
+        <h2>Eliminar Comentario</h2>
+               <input type="hidden" id="idCommentDC" name="idCommentDC">
+        <p class="texted-muted">¿Seguro que desea eliminar este comentario?</p>
+
+        <button class=" btn btn-profile-info" type="submit" id="Delete-comment" >Eliminar</button>
+        <button class=" btn btn-profile-info" type="button" id="DeleteClosecomment" >Cancelar</button>
+        </form>
+    </div>
+</div>
+<!-- comment -->
+
+<!--=================EDIT COMMENT====================-->
+<div class="customize-comment-edit">
+    <div class="card">
+        <!------------- PUBLICATION INFO-------------->
+        <div class="customize-edit-comment">
+           
+            <form action="UpdateCommentController" id="form-Editcomment" method ="post" class="formulario_register" enctype='multipart/form-data'>
+
+                <h2 class="texted-muted">Editar comentario</h2>
+               <input type="hidden" id="idCommentEC" name="idCommentEC">
+               <input type="hidden" id="idPubliEC" name="idPubliEC">
+                <div class="form-control">
+                        <input type="text" id="textoEditC" name="textoEditC" class="textoC" >
+                        <i class="icon check-circle">
+                            <svg s
+                            xmlns="http://www.w3.org/2000/svg" 
+                            width="1em" 
+                            height="1em" 
+                            viewBox="0 0 512 512">
+                            <path 
+                            d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm113-303L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
+                        </i>
+                        <i class="icon exclamation-circle">
+                            <svg 
+                            xmlns="http://www.w3.org/2000/svg" 
+                            width="1em" 
+                            height="1em" 
+                            viewBox="0 0 512 512">
+                            <path
+                            d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm0-384c13.3 0 24 10.7 24 24v112c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"/></svg>
+                        </i>
+                        <small class="small_register">Error message</small>
+
+                    <p>Spoiler</p>
+                    <input class="input_spoiler" type="checkbox" id="spoilerEC" name="spoilerEC">
+                </div>
+                <button class=" btn btn-profile-info" type="subtmit" id="Edit-comment" >Guardar</button>
+                 <button class=" btn btn-profile-info" type="button" id="EditClosecomment" >Cancelar</button>
+            </form>
+        </div>
+    </div>
+ </div>
 <!---------------------------FOOTER--------------------------->
 <div class="footer-content">
 
@@ -784,7 +1418,7 @@
 <footer>
     <div class="footer-content">
        
-        <h2>Facultad de Ciencias Físico Matemáticas</h2>
+        <h2> <b>Facultad de Ciencias Físico Matemáticas</b> </h2>
         <h3>Programación Web</h3>
         <h1>1904119 Melany Arleth Jiménez Gómez </h1>
         <h1>1896868 Denisse Alejandra Cardoza Pezina </h1>
@@ -799,6 +1433,8 @@
     </div>
 </footer>
 
-<script src="./HOME/HOME.js"></script>
+
+    <script src="./HOME/HOME.js"></script>
+
     </body>
 </html>
