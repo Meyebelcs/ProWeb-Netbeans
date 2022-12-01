@@ -126,13 +126,16 @@ public class PublicacionController extends HttpServlet {
          boolean result = pDAO.agregar(post);
             
            if(result){
-             ArrayList<ConsultaPublicacion> publicaciones = pDAO.getPublicaciones();
+             ArrayList<ConsultaPublicacion> publicaciones = pDAO.getPublicaciones(1);
                  ArrayList<ConsultaComentario> comentarios = cDAO.getComentarios();
                  ArrayList<MeGusta> meGustas = mDAO.getMeGusta();
                 request.setAttribute("meGustas", meGustas);
-             request.setAttribute("publicaciones", publicaciones);
+                request.setAttribute("publicaciones", publicaciones);
                 request.setAttribute("comentarios", comentarios);
-             request.getRequestDispatcher("/HOME/HOME.jsp").forward(request, response);
+                request.setAttribute("section", 1);
+                request.setAttribute("page", 1);
+                request.setAttribute("desp", 1);
+                request.getRequestDispatcher("/HOME/HOME.jsp").forward(request, response);
            }
             
        } catch (SQLException ex) {

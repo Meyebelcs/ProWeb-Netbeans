@@ -109,6 +109,7 @@ public class UpdateUsuarioController extends HttpServlet {
             }else{
                 bytes=null;
             }
+            
                         
             Usuario user = new Usuario(Integer.parseInt(id), nombres, apellidos, fechaNacimiento, email, bytes, usuario, contraseña, true);
             
@@ -131,12 +132,15 @@ public class UpdateUsuarioController extends HttpServlet {
                 request.setAttribute("id",datos.getInt("idUsuario"));
                 request.setAttribute("usuario", usuario);
                 request.setAttribute("contraseña", contraseña);
-                 ArrayList<ConsultaPublicacion> publicaciones = pDAO.getPublicaciones();
+                 ArrayList<ConsultaPublicacion> publicaciones = pDAO.getPublicaciones(1);
                  ArrayList<ConsultaComentario> comentarios = cDAO.getComentarios();
                  ArrayList<MeGusta> meGustas = mDAO.getMeGusta();
                 request.setAttribute("meGustas", meGustas);
                 request.setAttribute("publicaciones", publicaciones);
                 request.setAttribute("comentarios", comentarios);
+                    request.setAttribute("page", 1);
+                    request.setAttribute("section", 1);
+                    request.setAttribute("desp", 1);
                 request.getRequestDispatcher("/HOME/HOME.jsp").forward(request, response);
             }
             

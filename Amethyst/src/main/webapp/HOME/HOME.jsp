@@ -8,7 +8,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
+        <meta charset="ISO-8859-1">
     
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +24,9 @@
      <nav>
          
         <div class="container">
-            <a href="/" class="active"><img width="10" src="LOGIN_REGISTER/assets/Amethyst home.png" alt="Inicio"></a>
+            <div class="profile-photo" id="profile-edit">
+                <img src="HOME/images/social logo.png">
+            </div>
             <h2 class="log">
                 Amethyst
             </h2>
@@ -35,12 +37,13 @@
                 </form>
             </div>
             <div class="create">
-                <label class=" btn btn-primary" for="create-post">Create</label>
-
+                <form action="LogOut" method="POST">
+                <button type="submit" class=" btn btn-primary">Cerrar Sesión</button>
+                </form>
 
                 <div class="click-profile">
                     <div class="profile-photo" id="profile-edit">
-                        <img src="UImgController?id=${id}">
+                        <img src="UImgController?id=${id}" onclick="openProfileModal()">
                     </div>
                 </div>
 
@@ -67,16 +70,19 @@
             <!---------------------SIDEBAR-------------->
             <div class="sidebar">
                 <form action="MasRecientes" method="POST">
+                <input type="hidden" id="masRecientes" name="page" value="${page}">
                 <a class="menu-item active">
                     <span><i class="uil uil-cloud-heart"></i></span> <button><h3>Más recientes</h3></button>
                 </a>
                 </form>
                 <form action="MasComentadas" method="POST">
+                <input type="hidden" id="masComentarios" name="page" value="${page}">
                 <a class="menu-item">
                     <span><i class="uil uil-envelope-heart"></i></span> <button><h3>Más comentadas</h3></button>
                 </a>
                 </form>
                 <form action="MasVotadas" method="POST">
+                <input type="hidden" id="masVotadas" name="page" value="${page}">
                 <a class="menu-item">
                     <span><i class="uil uil-file-heart"></i></span> <button><h3>Más votadas</h3></button>
                 </a>
@@ -155,7 +161,7 @@
 
             </div>
             <!--------------------END OF SIDEBAR ---------------------->
-            <label for="create-post" class="btn btn-primary">Hacer publicación</label>
+            <label for="create-post" style="color:red" class="btn btn-primary">Hacer publicación</label>
             </div>
             <!--------------------------END OF LEFT-------------------->
 
@@ -214,6 +220,7 @@
                 <!-----------------------FEEDS-------------------------->
                 <div class="feeds">
                      <!-----------------------FEED 1-------------------------->
+                                         
                      <c:set var="spoilerCount" value="0"/>
                      <c:set var="commentCount" value="0"/>
                      
@@ -321,6 +328,8 @@
                                     <form action="DeleteMeGustaController" method="POST">
                                 <input type="hidden" value="${publicacion.idPublicacion}" name="input-idPubliL">
                                 <input type="hidden" value="${idLiked}" name="input-idLike">
+                                <input type="hidden" id="pageMG" name="pageMG" value="${page}">
+                                <input type="hidden" id="sectionMG" name="sectionMG" value="${section}">
                                 <button type="submit" id="likeheart${index.count}"><span class="likedHeart"><i class="uil uil-heart"></i></span></button>
                                 <span><i class="uil uil-comment-dots"></i></span>
                                 <span><i class="uil uil-share"></i></span>
@@ -329,6 +338,8 @@
                                 <c:otherwise> 
                                     <form action="MeGustaController" method="POST">
                                 <input type="hidden" value="${publicacion.idPublicacion}" name="input-idPubliL">
+                                <input type="hidden" id="pageMG" name="pageMG" value="${page}">
+                                <input type="hidden" id="sectionMG" name="sectionMG" value="${section}">
                                 <button type="submit" class="likeHeart" id="likeheart${index.count}"><i class="uil uil-heart"></i></button>
                                 <span><i class="uil uil-comment-dots"></i></span>
                                 <span><i class="uil uil-share"></i></span>
@@ -344,11 +355,18 @@
                         <div class="liked-by">
                             <p>Le gusta a <b>${publicacion.meGusta}</b> personas</p>
                         </div>
-
-                        <div class="caption">
-                        <p class="hash-tag" > <b>${publicacion.username}</b><b>  </b>${publicacion.texto} </p>
+                      <c:choose>
+                      <c:when test="${(spoiler == true)}"> 
+                        <div class="caption texto">
+                        <p class="hash-tag commentspoiler" > <b>${publicacion.username}</b><b>  </b>${publicacion.texto} </p>
                         </div>
-
+                       </c:when>
+                       <c:otherwise> 
+                          <div class="caption">
+                        <p class="hash-tag" > <b>${publicacion.username}</b><b>  </b>${publicacion.texto} </p>
+                        </div>                           
+                        </c:otherwise>
+                        </c:choose>
                         
                         <div class="comments text-muted" style="cursor: pointer;" id="showComments${index.count}" onclick="MostrarComentarios(${index.index})">Ver los ${publicacion.comentarios} comentarios</div>
                         
@@ -412,9 +430,11 @@
                                     <div class="avatar">
                                         <img src="UImgController?id=${id}" alt="img">
                                     </div>
-                                   <form action="ComentarioController" method="post" class="comentar-comentario">
+                                   <form action="ComentarioController" method="post" class="comentar-comentario" >
                                        <input type="hidden" name="idCP" value="${publicacion.idPublicacion}">
-                                       <input type="text" name="textC" value="" placeholder="">
+                                    <input type="hidden" id="pageC" name="pageC" value="${page}">
+                                    <input type="hidden" id="sectionC" name="sectionC" value="${section}">
+                                       <input required type="text" name="textC" id="textC${index.count}" value="" placeholder="">
                                        <button type="submit" class="btn btn-primary">
                                         <center>
                                         <i class="uil uil-message"></i>
@@ -479,10 +499,20 @@
                                 </div>
                             </span>
                         </div>
-                        
-                        <div class="caption">
-                            <br><p class="hash-tag"><b>                          </b> ${publicacion.texto}</p>
+                         <c:set var="spoiler2" value="${publicacion.spoiler}"/>      
+                         <c:choose>
+                      <c:when test="${(spoiler2 == true)}"> 
+                        <div class="caption texto">
+                            <p class="commentspoiler">${publicacion.texto}</p>
                         </div>
+                       </c:when>
+                       <c:otherwise> 
+                         <div class="caption">
+                            <br><p class="">${publicacion.texto}</p>
+                        </div>                          
+                        </c:otherwise>
+                        </c:choose>
+                        
 
                         
 
@@ -509,6 +539,8 @@
                                     <form action="DeleteMeGustaController" method="POST">
                                 <input type="hidden" value="${publicacion.idPublicacion}" name="input-idPubliL">
                                 <input type="hidden" value="${idLiked}" name="input-idLike">
+                                <input type="hidden" id="pageMG" name="pageMG" value="${page}">
+                                <input type="hidden" id="sectionMG" name="sectionMG" value="${section}">
                                 <button type="submit" class="likedHeart" id="likeheart${index.count}"><i class="uil uil-heart"></i></button>
                                 <span><i class="uil uil-comment-dots"></i></span>
                                 <span><i class="uil uil-share"></i></span>
@@ -517,6 +549,8 @@
                                 <c:otherwise> 
                                     <form action="MeGustaController" method="POST">
                                 <input type="hidden" value="${publicacion.idPublicacion}" name="input-idPubliL">
+                                <input type="hidden" id="pageMG" name="pageMG" value="${page}">
+                                <input type="hidden" id="sectionMG" name="sectionMG" value="${section}">
                                 <button type="submit" class="likeHeart" id="likeheart${index.count}"><i class="uil uil-heart"></i></button>
                                 <span><i class="uil uil-comment-dots"></i></span>
                                 <span><i class="uil uil-share"></i></span>
@@ -533,24 +567,28 @@
                             <p>Le gusta a <b>${publicacion.meGusta}</b> personas</p>
                         </div>
 
-                        <div class="comments text-muted" style="cursor: pointer;" id="showComments">Ver los ${publicacion.comentarios} comentarios</div>
+                        <div class="comments text-muted" style="cursor: pointer;" id="showComments" onclick="MostrarComentarios(${index.index})">Ver los ${publicacion.comentarios} comentarios</div>
 
-                        <!-----------------------COMENTARIOS----------------------->
+                         <!-----------------------COMENTARIOS----------------------->
                        
                         <section class="contenedor-comentarios">
                             <div class="comentarios-usuarios">
                                 <!-- comentario principal -->
-                                 <c:forEach items="${comentarios}" var="comentario" varStatus="index">
+                                 <c:forEach items="${comentarios}" var="comentario" varStatus="indexC">
                                          <c:set var="commentPubli" value="${comentario.idPublicacion}"/>
                                          <c:set var="PubliId" value="${publicacion.idPublicacion}"/>
                                             <c:if test="${(commentPubli == PubliId)}">
                                 <div class="comentario-principal-usuario">
                                     <div class="avatar">
                                         <img src="UImgController?id=${comentario.idUsuario}" alt="img">
-                                    </div>
+                                        </div>
                                     <div class="comentario">
                                         <div class="usuario-comentario">
                                             <div class="texto">
+                                            <input type="hidden" value="${comentario.idComentario}" id="input-idC${commentCount}">
+                                            <input type="hidden" value="${comentario.texto}" id="input-textC${commentCount}">
+                                            <input type="hidden" value="${comentario.spoiler}" id="input-spoilerC${commentCount}">
+                                            <input type="hidden" value="${comentario.idPublicacion}" id="input-idPC${commentCount}">
                                                 <a href="#" title="" class="nombre-usuario">${comentario.usuario}</a> 
                                                   <c:set var="spoiler" value="${comentario.spoiler}"/>
                                                     <c:choose>
@@ -568,7 +606,7 @@
                                                     <c:if test = "${idUC == usuario}">
                                                     <ul class="menu">
                                                         <li><a id="btn-Edit-Comment${commentCount}">Editar</a></li>
-                                                        <li><a id="btn-Eliminar-Comment${commentCount}+">Eliminar</a></li>
+                                                        <li><a id="btn-Eliminar-Comment${commentCount}">Eliminar</a></li>
                                                     </ul>
                                                     </c:if>
                                                 </div>
@@ -582,6 +620,7 @@
                                             
                                     </div>
                                 </div>
+                                    <c:set var="commentCount" value="${commentCount+1}"/>
                                  
                               </c:if>
                               </c:forEach>      
@@ -592,7 +631,9 @@
                                     </div>
                                    <form action="ComentarioController" method="post" class="comentar-comentario">
                                        <input type="hidden" name="idCP" value="${publicacion.idPublicacion}">
-                                       <input type="text" name="textC" value="" placeholder="">
+                                    <input type="hidden" id="pageC" name="pageC" value="${page}">
+                                    <input type="hidden" id="sectionC" name="sectionC" value="${section}">
+                                       <input required type="text" name="textC" value="" placeholder="">
                                        <button type="submit" class="btn btn-primary">
                                         <center>
                                         <i class="uil uil-message"></i>
@@ -620,168 +661,26 @@
                     </c:choose>
                  </c:forEach>
                      
-                      <div class="feed">
-                        <div class="head">
-                            <div class="user">
-                                <div class="profile-photo">
-                                    <img src="HOME/images/profile-9.jpg">
-                                </div>
-                                <div class="ingo">
-                                    <h3>  Ryan Mortdecai</h3>
-                                    <small>  THE WEEKND, HACE 3 DÍAS</small>
-                                </div>
-                            </div>
-                            <span class="edit">
-                                <i class="uil uil-ellipsis-h"></i>
-                                <div class="menu-feed">
-                                    <i class="uil uil-pen"></i>
-                                    <ul class="menu">
-                                        <li><a href="">Editar</a></li>
-                                        <li><a href="">Eliminar</a></li>
-                                    </ul>
-                                </div>
-                            </span>
-                        </div>
-
-                        <div class="photo">
-                             <img src="HOME/images/feed-7.jpg">
-                            <div id="image-data" class="image-data">
-                               
-                                <h2 class="image-data_title">Spoiler</h2>
-                                <p class="image-data_text">¿Estás seguro de querer ver este contenido?</p>
-                                <label class=" btn btn-primary" id="spoiler-feed">Aceptar</label>
-                                
-                            </div>
-                        </div>
-
-                        <div class="action-buttons">
-                            <div class="interaction-buttons">
-                                <span class="likedHeart" id="likeheart"><i class="uil uil-heart"></i></span>
-                                <span><i class="uil uil-comment-dots"></i></span>
-                                <span><i class="uil uil-share"></i></span>
-                            </div>
-                            <div class="bookmark">
-                                <span><i class="uil uil-bookmark"></i></span>
-                            </div>
-                        </div>
-                        
-                        <div class="liked-by">
-                            <span><img src="HOME/images/profile-6.jpg"></span>
-                            <span><img src="HOME/images/profile-8.jpg"></span>
-                            <span><img src="HOME/images/profile-12.jpg"></span>
-                            <p>Le gusta a <b>Gal Vamp</b> y <b>12 personas más</b> </p>
-                        </div>
-
-                          <div class="caption">
-                        <p class="hash-tag"> <b>Denisse Cardoza</b> Un poco del festival de Halloween #Halloween #FCFM #Night #Halloween </p>
-                        </div>
-
-                       
-                        
-                        <div class="comments text-muted" style="cursor: pointer;" id="showComments">Ver los 15 comentarios</div>
-                         <!-----------------------COMENTARIOS----------------------->
-                         <section class="contenedor-comentarios">
-                           
-                            <div class="comentarios-usuarios">
-                                <!-- comentario principal -->
-                                <div class="comentario-principal-usuario">
-                                    <div class="avatar">
-                                        <img src="HOME/images//profile-5.jpg" alt="img">
-                                    </div>
-                                    <div class="comentario">
-                                        <div class="usuario-comentario">
-                                            <div class="texto">
-                                                <a href="#" title="" class="nombre-usuario"> Kevin Mora</a> 
-                                                <p class="commentspoiler">De verdad es la FCFM? no parece :0</p> 
-                                                <div class="menu-comentario">
-                                                    <i class="uil uil-pen"></i>
-                                                    <ul class="menu">
-                                                        <li><a href="">Editar</a></li>
-                                                        <li><a href="">Eliminar</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                            <div class="botones-comentario">
-                                                <button type="" class="boton-puntuar">
-                                                    <i class="uil uil-thumbs-up"></i>
-                                                    5
-                                                </button>
-                                                <button type="" class="boton-responder">
-                                                    responder
-                                                </button>
-                                                <span class="tiempo-comentario">
-                                                    hece 3 min
-                                                </span>
-                                            </div>
-                                        </div>
-                        
-                                        <!-- contenedor sub comentarios -->
-                                        <div class="contenedor-sub-comentarios">
-                                            <!-- sub-comentario uno -->
-                                            <div class="comentario-principal-usuario">
-                                                <div class="avatar">
-                                                    <img src="HOME/images/profile-3.jpg" alt="img">
-                                                </div>
-                                                <div class="comentario">
-                                                    <div class="usuario-comentario">
-                                                        <div class="texto">
-                                                            <a href="#" title="" class="nombre-usuario">Iram Cervantes</a>
-                                                            <p>Si bro, fue en la cancha de basquet</p>
-                                                            
-                                                            <div class="menu-comentario">
-                                                                <i class="uil uil-pen"></i>
-                                                                <ul class="menu">
-                                                                    <li><a href="">Editar</a></li>
-                                                                    <li><a href="">Eliminar</a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                        <div class="botones-comentario">
-                                                            <button type="" class="boton-puntuar">
-                                                                <i class="uil uil-thumbs-up"></i>
-                                                                12
-                                                            </button>
-                                                            <button type="" class="boton-responder">
-                                                                responder
-                                                            </button>
-                                                            <span class="tiempo-comentario">
-                                                                hece 3 min
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                        
-                                    </div>
-                        
-                                </div>
-                        
-                                <div class="comentar-publicacion">
-                                    <div class="avatar">
-                                        <img src="HOME/images/profile-13.jpg" alt="img">
-                                    </div>
-                                   <form action="#" method="post" class="comentar-comentario">
-                                       <input type="text" name="" value="" placeholder="">
-                                       <button type="" class="btn btn-primary">
-                                        <center>
-                                        <i class="uil uil-message"></i>
-                                        </center>
-                                       </button>
-                                   </form>
-                                </div>
-                                
-                            </div>
-                        </section>
-                    </div>
                      
-                       
                     <!------------------------------END OF FEED--------------------------->                 
                 </div>
                 <!------------------------------END OF FEEDS------------------->
+               
                 <div class="final-buts">
-                    <label class=" btn btn-primary final-buttons" id="Anterior">Anterior</label>
-                    <label class=" btn btn-primary final-buttons" id="Siguiente">Siguiente</label>
+                    <form action="PaginacionAntController" method="POST">
+                        <input type="hidden" id="AntPage" name="page" value="${page}">
+                        <input type="hidden" id="AntSection" name="section" value="${section}">
+                        <c:if test="${page-1>0}">
+                        <button type="submit" class=" btn btn-primary final-buttons" id="Anterior">Anterior</button>
+                        </c:if>
+                    </form>
+                    <form action="PaginacionDespController" method="POST">
+                        <input type="hidden" id="DespPage" name="page" value="${page}">
+                        <input type="hidden" id="DespSection" name="section" value="${section}">
+                        <c:if test="${desp==1}">
+                        <button type="submit" class=" btn btn-primary final-buttons" id="Siguiente">Siguiente</button>
+                        </c:if>
+                        </form>
                 </div>
             </div>
             <!--============================END OD MIDDLE==============================-->
@@ -1037,160 +936,91 @@
                
                 <div class="form-control">
                     <input type="text" id="nombresE" name="nombresE" value="<%=request.getSession().getAttribute("nombres")%>" onkeypress="return validaLetras(event);" >
-                    <i class="icon check-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path 
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm113-303L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
-                    </i>
-                    <i class="icon exclamation-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm0-384c13.3 0 24 10.7 24 24v112c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"/></svg>
-                    </i>
-                    <small class="small_register">Error message</small>
+                    <div class="alertRed-empty">
+                    <i class="uil uil-exclamation-circle"></i>
+                    <p>El campo no puede estar vacio</p>
+                 </div>
+                    <div class="alertRed-invalid-characters">
+                    <i class="uil uil-exclamation-circle"></i>
+                    <p>Carácteres no inválidos</p>
+                 </div>
                 </div>
                 <div class="form-control">
                     <input type="text" id="apellidosE" name="apellidosE" value="<%=request.getSession().getAttribute("apellidos")%>" onkeypress="return validaLetras(event);">
-                    <i class="icon check-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path 
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm113-303L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
-                    </i>
-                    <i class="icon exclamation-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm0-384c13.3 0 24 10.7 24 24v112c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"/></svg>
-                    </i>
-                    <small class="small_register  error">Error message</small>
+                   <div class="alertRed-empty">
+                    <i class="uil uil-exclamation-circle"></i>
+                    <p>El campo no puede estar vacio</p>
+                 </div>
+                        <div class="alertRed-invalid-characters">
+                    <i class="uil uil-exclamation-circle"></i>
+                    <p>Carácteres no inválidos</p>
+                 </div>
                 </div>
                 <div class="form-control">
                     <input type="email" id="CorreoE" name="CorreoE" value="<%=request.getSession().getAttribute("email")%>">
-                    <i class="icon check-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path 
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm113-303L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
-                    </i>
-                    <i class="icon exclamation-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm0-384c13.3 0 24 10.7 24 24v112c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"/></svg>
-                    </i>
-                    <small class="small_register">Error message</small>
+                    <div class="alertRed-empty">
+                    <i class="uil uil-exclamation-circle"></i>
+                    <p>El campo no puede estar vacio</p>
+                 </div>
+                    <div class="alertRed-invalid-email">
+                    <i class="uil uil-exclamation-circle"></i>
+                    <p>El correo electrónico no es válido</p>
+                 </div>
                 </div>
                
                 <div class="form-control">
                     <input type="password" id="ContraseñaE" name="ContraseñaE" value="<%=request.getSession().getAttribute("contraseña")%>">
-                    <i class="icon check-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path 
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm113-303L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
-                    </i>
-                    <i class="icon exclamation-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm0-384c13.3 0 24 10.7 24 24v112c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"/></svg>
-                    </i>
-                    <small class="small_register">Error message</small>
+                    <div class="alertRed-empty">
+                    
+                    <p>El campo no puede estar vacio</p>
+                 </div>
+                         <div class="alertRed-password-number">
+                    <i class="uil uil-exclamation-circle"></i>
+                    <p>La contraseña debe contener al menos un número</p>
+                 </div>
+                      <div class="alertRed-password-mayus">
+                    <i class="uil uil-exclamation-circle"></i>
+                    <p>La contraseña debe contener al menos una mayúscula</p>
+                 </div>
+                    <div class="alertRed-password-minus">
+                    <i class="uil uil-exclamation-circle"></i>
+                    <p>La contraseña debe contener al menos una minúscula</p>
+                 </div>
+                               <div class="alertRed-password-sign">
+                    
+                    <p>La contraseña debe contener al menos un signo de puntuación</p>
+                 </div>
+                      <div class="alertRed-password-8">
+                    
+                    <p>La contraseña debe contener al menos 8 caracteres</p>
+                 </div> 
+                  
                 </div>
 
                 <div class="form-control">
                     <input type="password" id="ConfirmarContraseñaE" name="ConfirmarContraseñaE" value="<%=request.getSession().getAttribute("contraseña")%>">
-                    <i class="icon check-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path 
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm113-303L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
-                    </i>
-                    <i class="icon exclamation-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm0-384c13.3 0 24 10.7 24 24v112c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"/></svg>
-                    </i>
-                    <small class="small_register">Error message</small>
+                   <div class="alertRed-empty">
+                    <p>El campo no puede estar vacio</p>
+                 </div>
+                   <div class="alertRed-password-invalid">
+                    <p>La contraseña no coincide</p>
+                 </div>
                 </div>
                 <div class="form-control">
                     <p>Fecha de nacimiento</p>
-                    <i class="icon_fecha check-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path 
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm113-303L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
-                    </i>
-                    <i class="icon_fecha exclamation-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm0-384c13.3 0 24 10.7 24 24v112c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"/></svg>
-                    </i>
+                    
                     <input type="date"  id="fechaE" class="input_fecha" name="fechaE" value="<%=request.getSession().getAttribute("fechaNacimiento")%>">
-                    <small class="small_fecha">Error message</small>
+                    <div class="alertRed">
+                    <i class="uil uil-exclamation-circle"></i>
+                    <p>Debe ser mayor a 13 años</p>
+                    </div>
                 </div>
                 <div class="form-control">
                     <p>Foto de perfil</p>
-                    <i class="icon_foto check-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path 
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm113-303L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
-                    </i>
-                    <i class="icon_foto exclamation-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm0-384c13.3 0 24 10.7 24 24v112c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"/></svg>
-                    </i>
-                    <small class="small_foto">Error message</small>
+                   <div class="alertRed-empty">
+                    <i class="uil uil-exclamation-circle"></i>
+                    <p>El campo no puede estar vacio</p>
+                 </div>
                     <input accept="image/*" class="input_foto" type="file" id="fotoE" name="fotoE" value="null">
                 </div>
                 <button class=" btn btn-profile-info" type="subtmit" id="Save-Changes" >Guardar cambios</button>
@@ -1218,54 +1048,21 @@
                
                 <div class="form-control">
                     <input type="text" id="textoP" name="textoP" class="textoP" placeholder="¿Qué estás pensando?">
-                    <i class="icon check-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path 
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm113-303L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
-                    </i>
-                    <i class="icon exclamation-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm0-384c13.3 0 24 10.7 24 24v112c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"/></svg>
-                    </i>
-                    <small class="small_register">Error message</small>
+                   
                 </div>
                 
                 <div class="form-control">
                     <p>Foto</p>
-                    <i class="icon_foto check-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path 
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm113-303L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
-                    </i>
-                    <i class="icon_foto exclamation-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm0-384c13.3 0 24 10.7 24 24v112c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"/></svg>
-                    </i>
-                    <small class="small_foto">Error message</small>
-                    <input accept="image/*" class="input_foto" type="file" id="fotoP" name="fotoP" value="null">
+                   <input accept="image/*" class="input_foto" type="file" id="fotoP" name="fotoP" value="null">
                     <p>Spoiler</p>
                     <input class="input_spoiler" type="checkbox" id="spoiler" name="spoiler">
                 </div>
                 <button class=" btn btn-profile-info" type="subtmit" id="publish" >Publicar</button>
                  <button class=" btn btn-profile-info" type="button" id="Close" >Cerrar</button>
+                  <div class="alertRed">
+                    <i class="uil uil-exclamation-circle"></i>
+                    <p>Llena alguno de los campos para editar publicación</p>
+                 </div>
             </form>
         </div>
     </div>
@@ -1281,60 +1078,30 @@
             <form action="UpdatePublicacionControler" id="form-Editpublication" method ="post" class="formulario_register" enctype='multipart/form-data'>
 
                 <h2 class="texted-muted">Editar publicación</h2>
+                 <input type="hidden" id="pageEP" name="pageEP" value="${page}">
+                 <input type="hidden" id="sectionEP" name="sectionEP" value="${section}">
                  <input type="hidden" id="idPubliEP" name="idPubliEP">
+                 <input type="hidden" id="hasImageEP" name="hasImageEP">
                 <div class="form-control">
                     <input type="text" id="textoEP" name="textoEP" class="textoEP" placeholder="aqui va el texto o vacio segun la base de datos">
-                    <i class="icon check-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path 
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm113-303L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
-                    </i>
-                    <i class="icon exclamation-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm0-384c13.3 0 24 10.7 24 24v112c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"/></svg>
-                    </i>
-                    <small class="small_register">Error message</small>
-                </div>
+                  </div>
 
                 <div class="photo-edit-post">
-                    <img id="imgEP" class="edit-pic" src="/HOME/images/feed-1.jpg">
+                    <img hidden id="imgEP" class="edit-pic" src="/HOME/images/feed-1.jpg">
                 </div>
                 
-                <div class="form-control">
-                    <i class="icon_foto check-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path 
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm113-303L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/></svg>
-                    </i>
-                    <i class="icon_foto exclamation-circle">
-                        <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        width="1em" 
-                        height="1em" 
-                        viewBox="0 0 512 512">
-                        <path
-                        d="M256 512c141.4 0 256-114.6 256-256S397.4 0 256 0S0 114.6 0 256s114.6 256 256 256zm0-384c13.3 0 24 10.7 24 24v112c0 13.3-10.7 24-24 24s-24-10.7-24-24V152c0-13.3 10.7-24 24-24zm32 224c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z"/></svg>
-                    </i>
-                    <small class="small_foto">Error message</small>
+                
+                <div class="form_control">   
                     <input accept="image/*" class="input_foto" type="file" id="fotoEP" name="fotoEP" value="null">
                     <p>Spoiler</p>
                     <input class="input_spoiler" type="checkbox" id="spoilerEditP" name="spoilerEditP">
                 </div>
                 <button class=" btn btn-profile-info" type="subtmit" id="publish" >Guardar</button>
-                 <button class=" btn btn-profile-info" type="button" id="EditClose" >Cancelar</button>
+                 <button class=" btn btn-profile-info" type="button" id="EditCloseP" >Cancelar</button>
+                 <div class="alertRed">
+                    <i class="uil uil-exclamation-circle"></i>
+                    <p>Llena alguno de los campos para editar publicación</p>
+                 </div>
             </form>
         </div>
     </div>
@@ -1346,6 +1113,8 @@
         <form action="DeletePublicationController" method="POST">
             <h2>Eliminar Publicación</h2>
             <input type="hidden" id="idPubliDP" name="idPubliDP">
+            <input type="hidden" id="pageDP" name="pageDP" value="${page}">
+            <input type="hidden" id="sectionDP" name="sectionDP" value="${section}">
             <p class="texted-muted">¿Seguro que desea eliminar esta publicación?</p>
 
             <button class=" btn btn-profile-info" type="subtmit" id="Delete-post" >Eliminar</button>
@@ -1360,6 +1129,8 @@
          <form action="DeleteCommentController" method="POST">
         <h2>Eliminar Comentario</h2>
                <input type="hidden" id="idCommentDC" name="idCommentDC">
+                 <input type="hidden" id="pageDC" name="pageDC" value="${page}">
+                 <input type="hidden" id="sectionDC" name="sectionDC" value="${section}">
         <p class="texted-muted">¿Seguro que desea eliminar este comentario?</p>
 
         <button class=" btn btn-profile-info" type="submit" id="Delete-comment" >Eliminar</button>
@@ -1378,10 +1149,12 @@
             <form action="UpdateCommentController" id="form-Editcomment" method ="post" class="formulario_register" enctype='multipart/form-data'>
 
                 <h2 class="texted-muted">Editar comentario</h2>
+                 <input type="hidden" id="pageEC" name="pageEC" value="${page}">
+                 <input type="hidden" id="sectionEC" name="sectionEC" value="${section}">
                <input type="hidden" id="idCommentEC" name="idCommentEC">
                <input type="hidden" id="idPubliEC" name="idPubliEC">
                 <div class="form-control">
-                        <input type="text" id="textoEditC" name="textoEditC" class="textoC" >
+                        <input type="text" required oninvalid="this.setCustomValidity('No puedes dejar vacia la caja de comentario!!!')" id="textoEditC" name="textoEditC" class="textoC" >
                         <i class="icon check-circle">
                             <svg s
                             xmlns="http://www.w3.org/2000/svg" 

@@ -102,7 +102,9 @@ public class UserLogin extends HttpServlet {
                 PublicacionDAO pDAO = new PublicacionDAO();
                 ComentarioDAO cDAO = new ComentarioDAO();
                 MeGustaDAO mDAO = new MeGustaDAO();
-            
+                int page=1;
+                int section=1;
+                int desp=1;
                 ResultSet datos = uDAO.consultar(usuario);
                 mySession.setAttribute("usuario", usuario);
                 mySession.setAttribute("id", datos.getInt("idUsuario"));
@@ -112,10 +114,13 @@ public class UserLogin extends HttpServlet {
                 mySession.setAttribute("email", datos.getString("email"));
                 mySession.setAttribute("contraseña", datos.getString("contraseña"));
                 mySession.setAttribute("fechaNacimiento", datos.getString("fechaNacimiento"));
+                request.setAttribute("page", page);
+                request.setAttribute("section", section);
+                request.setAttribute("desp", desp);
                 request.setAttribute("id",datos.getInt("idUsuario"));
                 request.setAttribute("usuario", usuario);
                 request.setAttribute("contraseña", contraseña);
-                 ArrayList<ConsultaPublicacion> publicaciones = pDAO.getPublicaciones();
+                 ArrayList<ConsultaPublicacion> publicaciones = pDAO.getPublicaciones(page);
                  ArrayList<ConsultaComentario> comentarios = cDAO.getComentarios();
                  ArrayList<MeGusta> meGustas = mDAO.getMeGusta();
                 request.setAttribute("meGustas", meGustas);

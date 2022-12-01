@@ -91,16 +91,24 @@ public class UpdatePublicacionControler extends HttpServlet {
         HttpSession session=request.getSession(); 
         String id=session.getAttribute("id").toString();
         String idPublicacion = request.getParameter("idPubliEP");
+        String page = request.getParameter("pageEP");
+        String section = request.getParameter("sectionEP");
         String texto = request.getParameter("textoEP");
+        String image = request.getParameter("hasImageEP");
         Part filePart = request.getPart("fotoEP");
         InputStream bytes;
          boolean hasImage=false;
+         
+         if(image.equals("true")){
+             hasImage=true;
+         }else{
+             hasImage=false;
+         }
+         
         if(filePart.getSize() > 1){
            bytes = filePart.getInputStream();
-           hasImage=true;
         }else{
            bytes=null;
-           hasImage=false;
         }
         String spoiler = request.getParameter("spoilerEditP");
         boolean isSpoiler=false;
@@ -110,27 +118,112 @@ public class UpdatePublicacionControler extends HttpServlet {
             isSpoiler=false;
         }
        
+        int newpage=Integer.parseInt(page);
+        int newpage2=Integer.parseInt(page)+1;
+        
         Publicacion post = new Publicacion(Integer.parseInt(idPublicacion), texto, bytes, hasImage,isSpoiler,  Integer.parseInt(id), true, null);
         
         PublicacionDAO pDAO = new PublicacionDAO();
         ComentarioDAO cDAO = new ComentarioDAO();
         MeGustaDAO mDAO= new MeGustaDAO();
         
-        try {
-            boolean result = pDAO.editar(post);
-            
-            if(result){
-            ArrayList<ConsultaPublicacion> publicaciones = pDAO.getPublicaciones();
-                 ArrayList<ConsultaComentario> comentarios = cDAO.getComentarios();
-                 ArrayList<MeGusta> meGustas = mDAO.getMeGusta();
-                request.setAttribute("meGustas", meGustas);
-             request.setAttribute("publicaciones", publicaciones);
-                request.setAttribute("comentarios", comentarios);
-             request.getRequestDispatcher("/HOME/HOME.jsp").forward(request, response);
+        if(Integer.parseInt(section)==1){
+            try {
+                boolean result = pDAO.editar(post);
+
+                if(result){
+                ArrayList<ConsultaPublicacion> publicaciones = pDAO.getPublicaciones(newpage);
+                ArrayList<ConsultaPublicacion> isDesp = pDAO.getPublicaciones(newpage2);
+                if(isDesp.size()<1){  
+                    request.setAttribute("desp", 0);
+                }else{
+                    request.setAttribute("desp", 1);
+                }
+                     ArrayList<ConsultaComentario> comentarios = cDAO.getComentarios();
+                     ArrayList<MeGusta> meGustas = mDAO.getMeGusta();
+                    request.setAttribute("meGustas", meGustas);
+                    request.setAttribute("publicaciones", publicaciones);
+                    request.setAttribute("comentarios", comentarios); 
+                    request.setAttribute("page", newpage);
+                    request.setAttribute("section", 1);
+                 request.getRequestDispatcher("/HOME/HOME.jsp").forward(request, response);
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(UpdatePublicacionControler.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(UpdatePublicacionControler.class.getName()).log(Level.SEVERE, null, ex);
+        }else if(Integer.parseInt(section)==2){
+            try {
+                boolean result = pDAO.editar(post);
+
+                if(result){
+                ArrayList<ConsultaPublicacion> publicaciones = pDAO.masComentadas(newpage);
+                ArrayList<ConsultaPublicacion> isDesp = pDAO.masComentadas(newpage2);
+                if(isDesp.size()<1){  
+                    request.setAttribute("desp", 0);
+                }else{
+                    request.setAttribute("desp", 1);
+                }
+                     ArrayList<ConsultaComentario> comentarios = cDAO.getComentarios();
+                     ArrayList<MeGusta> meGustas = mDAO.getMeGusta();
+                    request.setAttribute("meGustas", meGustas);
+                    request.setAttribute("publicaciones", publicaciones);
+                    request.setAttribute("comentarios", comentarios); 
+                    request.setAttribute("page", newpage);
+                    request.setAttribute("section", 2);
+                 request.getRequestDispatcher("/HOME/HOME.jsp").forward(request, response);
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(UpdatePublicacionControler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else if(Integer.parseInt(section)==3){
+            try {
+                boolean result = pDAO.editar(post);
+
+                if(result){
+                ArrayList<ConsultaPublicacion> publicaciones = pDAO.masVotadas(newpage);
+                ArrayList<ConsultaPublicacion> isDesp = pDAO.masVotadas(newpage2);
+                if(isDesp.size()<1){  
+                    request.setAttribute("desp", 0);
+                }else{
+                    request.setAttribute("desp", 1);
+                }
+                     ArrayList<ConsultaComentario> comentarios = cDAO.getComentarios();
+                     ArrayList<MeGusta> meGustas = mDAO.getMeGusta();
+                    request.setAttribute("meGustas", meGustas);
+                    request.setAttribute("publicaciones", publicaciones);
+                    request.setAttribute("comentarios", comentarios); 
+                    request.setAttribute("page", newpage);
+                    request.setAttribute("section", 3);
+                 request.getRequestDispatcher("/HOME/HOME.jsp").forward(request, response);
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(UpdatePublicacionControler.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else{
+                   
+            try {
+                boolean result = pDAO.editar(post);
+
+                if(result){
+                ArrayList<ConsultaPublicacion> publicaciones = pDAO.getPublicaciones(1);
+                     ArrayList<ConsultaComentario> comentarios = cDAO.getComentarios();
+                     ArrayList<MeGusta> meGustas = mDAO.getMeGusta();
+                    request.setAttribute("meGustas", meGustas);
+                    request.setAttribute("publicaciones", publicaciones);
+                    request.setAttribute("comentarios", comentarios);  
+                    request.setAttribute("page", 1);
+                    request.setAttribute("section", 1);
+                    request.setAttribute("desp", 1);
+                 request.getRequestDispatcher("/HOME/HOME.jsp").forward(request, response);
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(UpdatePublicacionControler.class.getName()).log(Level.SEVERE, null, ex);
+            }      
+        
         }
         
     }

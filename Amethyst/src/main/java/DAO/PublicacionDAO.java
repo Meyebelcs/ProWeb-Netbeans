@@ -58,8 +58,8 @@ public class PublicacionDAO {
         }
     }
      
-      public ArrayList<ConsultaPublicacion> getPublicaciones() throws SQLException{
-        String sql = "CALL sp_Consulta (?,?,?,?,?);";
+      public ArrayList<ConsultaPublicacion> getPublicaciones(int page) throws SQLException{
+        String sql = "CALL sp_Consulta (?,?,?,?,?,?);";
         
         ArrayList<ConsultaPublicacion> publicaciones = new ArrayList<>();
         
@@ -71,6 +71,7 @@ public class PublicacionDAO {
         ps.setString(3, null);
         ps.setString(4, null);
         ps.setString(5, null);
+        ps.setInt(6, page);
         rs = ps.executeQuery();
         
                
@@ -93,8 +94,8 @@ public class PublicacionDAO {
         return publicaciones;
     }
       
-      public ArrayList<ConsultaPublicacion> masVotadas() throws SQLException{
-        String sql = "CALL sp_Consulta (?,?,?,?,?);";
+      public ArrayList<ConsultaPublicacion> masVotadas(int page) throws SQLException{
+        String sql = "CALL sp_Consulta (?,?,?,?,?,?);";
         
         ArrayList<ConsultaPublicacion> publicaciones = new ArrayList<>();
         
@@ -106,6 +107,7 @@ public class PublicacionDAO {
         ps.setString(3, null);
         ps.setString(4, null);
         ps.setString(5, null);
+        ps.setInt(6, page);
         rs = ps.executeQuery();
         
                
@@ -128,8 +130,8 @@ public class PublicacionDAO {
         return publicaciones;
     }
       
-    public ArrayList<ConsultaPublicacion> masComentadas() throws SQLException{
-        String sql = "CALL sp_Consulta (?,?,?,?,?);";
+    public ArrayList<ConsultaPublicacion> masComentadas(int page) throws SQLException{
+        String sql = "CALL sp_Consulta (?,?,?,?,?,?);";
         
         ArrayList<ConsultaPublicacion> publicaciones = new ArrayList<>();
         
@@ -141,6 +143,7 @@ public class PublicacionDAO {
         ps.setString(3, null);
         ps.setString(4, null);
         ps.setString(5, null);
+        ps.setInt(6, page);
         rs = ps.executeQuery();
         
                
@@ -163,8 +166,8 @@ public class PublicacionDAO {
         return publicaciones;
     }
       
-         public ArrayList<ConsultaPublicacion> search(String text) throws SQLException{
-        String sql = "CALL sp_Consulta (?,?,?,?,?);";
+         public ArrayList<ConsultaPublicacion> search(String text, int page) throws SQLException{
+        String sql = "CALL sp_Consulta (?,?,?,?,?,?);";
         
         ArrayList<ConsultaPublicacion> publicaciones = new ArrayList<>();
         
@@ -176,6 +179,7 @@ public class PublicacionDAO {
         ps.setString(3, text);
         ps.setString(4, null);
         ps.setString(5, null);
+        ps.setInt(6, page);
         rs = ps.executeQuery();
         
                

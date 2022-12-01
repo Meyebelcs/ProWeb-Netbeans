@@ -81,6 +81,12 @@ public class MasComentadas extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        
+                request.setAttribute("section", 2);
+                request.setAttribute("page", 1);
+                request.setAttribute("desp", 1);
+        
             PublicacionDAO pDAO = new PublicacionDAO();
         ComentarioDAO cDAO = new ComentarioDAO();
         MeGustaDAO mDAO= new MeGustaDAO();
@@ -88,7 +94,7 @@ public class MasComentadas extends HttpServlet {
         
             ArrayList<ConsultaPublicacion> publicaciones;
         try {
-            publicaciones = pDAO.masComentadas();
+            publicaciones = pDAO.masComentadas(1);
             ArrayList<ConsultaComentario> comentarios = cDAO.getComentarios();
                  ArrayList<MeGusta> meGustas = mDAO.getMeGusta();
                 request.setAttribute("meGustas", meGustas);

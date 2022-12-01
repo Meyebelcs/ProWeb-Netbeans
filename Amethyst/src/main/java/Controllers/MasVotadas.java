@@ -81,12 +81,18 @@ public class MasVotadas extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        
+                request.setAttribute("section", 3);
+                request.setAttribute("page", 1);
+         request.setAttribute("desp", 1);
+        
         PublicacionDAO pDAO = new PublicacionDAO();
         ComentarioDAO cDAO = new ComentarioDAO();
         MeGustaDAO mDAO= new MeGustaDAO();
              
         try {
-            ArrayList<ConsultaPublicacion> publicaciones = pDAO.masVotadas();
+            ArrayList<ConsultaPublicacion> publicaciones = pDAO.masVotadas(1);
                  ArrayList<ConsultaComentario> comentarios = cDAO.getComentarios();
                  ArrayList<MeGusta> meGustas = mDAO.getMeGusta();
                 request.setAttribute("meGustas", meGustas);

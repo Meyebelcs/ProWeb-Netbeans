@@ -81,13 +81,18 @@ public class MasRecientes extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+         request.setAttribute("section", 1);
+         request.setAttribute("page", 1);
+         request.setAttribute("desp", 1);
+        
         PublicacionDAO pDAO = new PublicacionDAO();
         ComentarioDAO cDAO = new ComentarioDAO();
         MeGustaDAO mDAO= new MeGustaDAO();
         
                 
         try {
-            ArrayList<ConsultaPublicacion> publicaciones= pDAO.getPublicaciones();
+            ArrayList<ConsultaPublicacion> publicaciones= pDAO.getPublicaciones(1);
             ArrayList<ConsultaComentario> comentarios = cDAO.getComentarios();
                  ArrayList<MeGusta> meGustas = mDAO.getMeGusta();
                 request.setAttribute("meGustas", meGustas);

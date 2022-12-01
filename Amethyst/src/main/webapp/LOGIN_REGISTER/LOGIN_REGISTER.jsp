@@ -19,10 +19,10 @@
             <main>
 
         <div class="nav">
-            <a href="/" class="active"><img width="200" src="LOGIN_REGISTER/assets/Amethyst home.png" alt="Inicio"></a>
+            <a class="active"><img width="200" src="LOGIN_REGISTER/assets/Amethyst home.png" alt="Inicio"></a>
             <div class="barra-busqueda">
-                <form>
-                    <input type="text" placeholder="Buscar..." name="buscar">
+                <form action="BusquedaBasicaP" method="POST">
+                    <input type="text" placeholder="Buscar..." name="input-search">
                         <button type="submit"><i>
                             <svg 
                             xmlns="http://www.w3.org/2000/svg" 
@@ -34,9 +34,9 @@
                         </i></button>
                 </form>
             </div>
-            <a href="/" class="a-right">Iniciar Sesión</a>
-            <a href="/" class="a-right">Registrarse</a>
-            <a href="/" class="a-right perfil"><i><svg 
+            <a id="LogIn" class="a-right">Iniciar Sesión</a>
+            <a id="registro" class="a-right">Registrarse</a>
+            <a class="a-right perfil"><i><svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 width="3em" 
                 height="3em" 

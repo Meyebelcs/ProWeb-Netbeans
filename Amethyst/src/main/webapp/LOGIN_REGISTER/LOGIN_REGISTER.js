@@ -5,6 +5,8 @@
 
 document.getElementById("btn_registrarse").addEventListener("click",register);
 document.getElementById("btn_inciar-sesión").addEventListener("click",iniciarSesion);
+document.getElementById("registro").addEventListener("click",register);
+document.getElementById("LogIn").addEventListener("click",iniciarSesion);
 //document.getElementById("btn-login").addEventListener("click",login);
 //document.getElementById("registerf").addEventListener("click", registerf);
 
@@ -107,8 +109,7 @@ const pass=document.getElementById("passwordLogin");
             setSuccesFor(Fecha);
             ok++;
          }
-         
-         if(Foto.value.length<1){
+         if(Foto.files.length===0){
             setErrorFor(Foto,"No ha agregado ninguna foto");
          }else{
             setSuccesFor(Foto);

@@ -2,6 +2,25 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
  */
+
+const Nombres= document.getElementById("nombresE");
+const Apellidos= document.getElementById("apellidosE");
+const Correo= document.getElementById("CorreoE");
+const Contraseña= document.getElementById("ContraseñaE");
+const Contraseña2= document.getElementById("ConfirmarContraseñaE");
+const Fecha= document.getElementById("fechaE");
+const Foto= document.getElementById("fotoE");
+const alertRedpassword8 = document.querySelector('.alertRed-password-8');
+const alertRedpasswordInvalid = document.querySelector('.alertRed-password-invalid');
+
+const alertRed = document.querySelector('.alertRed');
+const alertRedEmpty = document.querySelector('.alertRed-empty');
+const alertRedCharacters = document.querySelector('.alertRed-invalid-characters');
+const alertRedEmail = document.querySelector('.alertRed-invalid-email');
+const alertRedNumber = document.querySelector('.alertRed-password-number');
+const alertRedMayus = document.querySelector('.alertRed-password-mayus');
+const alertRedMins = document.querySelector('.alertRed-password-minus');
+const alertRedSign = document.querySelector('.alertRed-password-sign');
 //------------------------------DELETE PUBLICATION---------------------------------
 const DeletepublicationModal = document.querySelector('.customize-delete-post');
 const Deletepublicationclick = document.querySelector('#btn-Eliminar-Post');
@@ -28,8 +47,8 @@ const EditpublicationModal = document.querySelector('.customize-publication-edit
 const Editpublicationclick = document.querySelector('#btn-Edit-Post');
 const Editpublicationcerrar = document.querySelector('#EditClose');
 
-const EditTexto= document.getElementById("textoEditP");
-const EditFotoP= document.getElementById("fotoEditP");
+const EditTexto= document.getElementById("textoEP");
+const EditFotoP= document.getElementById("fotoEP");
 
 //------------------------------PROFILE INFO EDIT---------------------------------
 const profileclick = document.querySelector('#profile-edit');
@@ -151,7 +170,7 @@ function MostrarComentarios(posicion) {
 //==========================PROFILE INFO EDIT=================================
 
 //opens modal
-const openProfileModal = () => {
+function openProfileModal() {
     profileModal.style.display = 'grid';
 };
 
@@ -168,87 +187,168 @@ const closeEditProfileModal = (e) => {
 
  $("#form-Editprofile").submit(function save() {
             
-            alert("holi");
-            
         var ok=0;
 
         var regexNombres=/^[a-zA-ZáéíóúÁÉÍÓÚñÑ]+(?: [a-zA-ZáéíóúÁÉÍÓÚñÑ]+)*$/;
         var regexE=/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))*$/;
 
         if(Nombres.value.length<1){ //Valida solo incluir letras alfabeto español}
-            setErrorFor(Nombres,"El campo no puede estar vacío");
-        }else if(!regexNombres.test(Nombres.value)){
-            setErrorFor(Nombres,"Carácteres no válidos");
+            //alertRedEmpty.style.display = 'flex';
+          //setErrorFor(Nombres,"El campo no puede estar vacío");
+                 
+         alert("El campo nombre no puede estar vacío");
         }else{
-            setSuccesFor(Nombres);
+            // alertRedEmpty.style.display = 'none';
+        }
+        
+        if(!regexNombres.test(Nombres.value)){
+            //alertRedCharacters.style.display = 'flex';
+            alert("El campo nombre tiene caracteres no validos");
+          //setErrorFor(Nombres,"Carácteres no válidos");
+        }else{
+           
+           // alertRedCharacters.style.display = 'none';
+           // setSuccesFor(Nombres);
             ok++;
         }
 
         if(Apellidos.value.length<1){ //Valida solo incluir letras alfabeto español
-            setErrorFor(Apellidos,"El campo no puede estar vacío");
-        }else if(!regexNombres.test(Apellidos.value)){
-            setErrorFor(Apellidos,"Carácteres no válidos");
+            //
+            //setErrorFor(Apellidos,"El campo no puede estar vacío");
+           // alertRedEmpty.style.display = 'flex';
+            alert("El campo apellidos no puede estar vacio");
         }else{
-            setSuccesFor(Apellidos);
+            
+           // alertRedEmpty.style.display = 'none';
+            
+        }
+        
+     if(!regexNombres.test(Apellidos.value)){
+            
+           // alertRedCharacters.style.display = 'flex';
+            alert("El campo apellidos tiene caracteres no validos");
+            //setErrorFor(Apellidos,"Carácteres no válidos");
+        }else{
+            //alertRedCharacters.style.display = 'none';
+            //setSuccesFor(Apellidos);
             ok++;
          }
 
          if(Correo.value.length<1){
-            setErrorFor(Correo,"El campo no puede estar vacío");
+             //alertRedEmpty.style.display = 'flex';
+            alert("El correo no puede estar vacío");
+           //setErrorFor(Correo,"El campo no puede estar vacío");
         }else if(!regexE.test(Correo.value)){ //evalua que haya texto, @, texto y luego .com
-            setErrorFor(Correo,"El correo electrónico no es válido");
+             //alertRedEmpty.style.display = 'none';
+               // alertRedEmail.style.display = 'flex';
+            alert("El correo no es valido");
+           //setErrorFor(Correo,"El correo electrónico no es válido");
         }else{
-            setSuccesFor(Correo);
+             alertRedEmpty.style.display = 'none';
+           alertRedEmail.style.display = 'none';
+           //setSuccesFor(Correo);
             ok++;
         }
          
          if(Contraseña.value.length<1){
-            setErrorFor(Contraseña,"El campo no puede estar vacío");
+              //  alertRedEmpty.style.display = 'flex';
+            alert("La contraseña no puede estar vacia");
+          // setErrorFor(Contraseña,"El campo no puede estar vacío");
          }else if(!Contraseña.value.match(/[0-9]/)){
-            setErrorFor(Contraseña,"La contraseña debe contener al menos un número");
+             //alertRedEmpty.style.display = 'none';
+             //alertRedNumber.style.display = 'flex';
+            alert("La contraseña debe contener al menos un número");
+         // setErrorFor(Contraseña,"La contraseña debe contener al menos un número");
          }else if(!Contraseña.value.match(/[A-Z]/)){
-            setErrorFor(Contraseña,"La contraseña debe contener al menos una mayúscula");
+            // alertRedEmpty.style.display = 'none';
+            // alertRedNumber.style.display = 'none';
+              //  alertRedMayus.style.display = 'flex';
+            alert("La contraseña debe contener al menos una mayuscula");
+           //setErrorFor(Contraseña,"La contraseña debe contener al menos una mayúscula");
          }else if(!Contraseña.value.match(/[a-z]/)){
-            setErrorFor(Contraseña,"La contraseña debe contener al menos una minúscula");
+            // alertRedEmpty.style.display = 'none';
+           //  alertRedNumber.style.display = 'none';
+              //  alertRedMayus.style.display = 'none';
+              //  alertRedMins.style.display = 'flex';
+            alert("La contraseña debe contener al menos una minuscula");
+           //setErrorFor(Contraseña,"La contraseña debe contener al menos una minúscula");
          }else if(!Contraseña.value.match(/[¿/?/!/¡/./,/;/:/-/(/)/"/']/)){
-            setErrorFor(Contraseña,"La contraseña debe contener al menos un signo de puntuación");
+            // alertRedEmpty.style.display = 'none';
+            // alertRedNumber.style.display = 'none';
+              //  alertRedMayus.style.display = 'none';
+              //  alertRedMins.style.display = 'none';
+              //  alertRedSign.style.display = 'flex';
+              //  
+            alert("La contraseña debe contener al menos un caracter especial");
+           //setErrorFor(Contraseña,"La contraseña debe contener al menos un signo de puntuación");
          }else if(Contraseña.value.length<8){
-            setErrorFor(Contraseña,"La contraseña debe contener al menos 8 caracteres");
+            // alertRedEmpty.style.display = 'none';
+            // alertRedNumber.style.display = 'none';
+              //  alertRedMayus.style.display = 'none';
+               // alertRedMins.style.display = 'none';
+              //  alertRedSign.style.display = 'none';
+              //  alertRedpassword8.style.display = 'flex';
+              
+            alert("La contraseña debe contener al menos 8 caracteres");
+           //etErrorFor(Contraseña,"La contraseña debe contener al menos 8 caracteres");
          }else{
-            setSuccesFor(Contraseña);
+          //setSuccesFor(Contraseña);
+             //   alertRedpassword8.style.display = 'none';
+             //   alertRedSign.style.display = 'none';
+             //   alertRedMins.style.display = 'none';
+              //  alertRedMayus.style.display = 'none';
+            // alertRedEmpty.style.display = 'none';
             ok++;
          }
 
          if(Contraseña2.value.length<1){
-            setErrorFor(Contraseña2,"El campo no puede estar vacío");
+             
+            alert("El campo confirmar contraseña no puede estar vacio");
+           // alertRedEmpty.style.display = 'flex';
+           //setErrorFor(Contraseña2,"El campo no puede estar vacío");
          }else if(Contraseña2.value!==Contraseña.value){
-            setErrorFor(Contraseña2,"Las contraseñas no coinciden");
+               // alertRedpasswordInvalid .style.display = 'flex';
+          //setErrorFor(Contraseña2,"Las contraseñas no coinciden");
+          
+            alert("Las contraseñas no coinciden");
          }else{
-            setSuccesFor(Contraseña2);
+           //setSuccesFor(Contraseña2);
+           alertRedEmpty.style.display = 'none';
+                alertRedpasswordInvalid .style.display = 'none';
             ok++;
          }
 
          if(Fecha.value.length<1){
-            setErrorFor(Fecha,"No seleccionó ninguna fecha");
+           // alertRedEmpty.style.display = 'flex';
+           //setErrorFor(Fecha,"No seleccionó ninguna fecha");
+           
+            alert("no seleccionó ninguna fecha");
          }else if(validateDate(Fecha.value)){
-            setErrorFor(Fecha,"Fecha no válida");
+           //  alertRedEmpty.style.display = 'none';
+          // setErrorFor(Fecha,"Fecha no válida");
+           alert("Fecha no valida");
         }else if(getAge(Fecha.value)<13){
-            setErrorFor(Fecha,"Debe ser mayor a 13 años");
+          //alertRed.style.display = 'flex';
+          
+           alert("El usuario no puede ser menor a 13 años");
         }else{ 
-            setSuccesFor(Fecha);
+          alertRed.style.display = 'none';
+             alertRedEmpty.style.display = 'none';
             ok++;
          }
+  
          
-          if(ok<7){
+          if(ok<6){
              return false;
-         }else if (ok===7){
+         }else if (ok===6){
              return true;
          } 
          
     });
     
-    $("#form-publication").submit(function publicacion() {
-            
+    
+    
+     $("#form-publication").submit(function publicacion() {   
             
         var ok=0;
 
@@ -256,15 +356,16 @@ const closeEditProfileModal = (e) => {
         var regexE=/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))*$/;
 
         if(Texto.value.length<1 && FotoP.files.length===0){ //Valida solo incluir letras alfabeto español}
-             alert("vacios");
-            setErrorFor(Texto,"El campo no puede estar vacío");
-            setErrorFor(FotoP,"El campo no puede estar vacío");
-        }else if(!regexNombres.test(Texto.value)){
-            alert("letras");
-            setErrorFor(Texto,"Carácteres no válidos");
+          //setErrorFor(Texto,"El campo no puede estar vacío");
+          //setErrorFor(FotoP,"El campo no puede estar vacío");
+          alert("Debe llenar al menos uno de los campos para poder realizar la publicación");
+            alertRed.style.display = 'flex';
+            return false;
         }else{
-            setSuccesFor(Nombres);
-            setsuccesFor(FotoP);
+             alertRed.style.display = 'none';
+             return true;
+            //setSuccesFor(Nombres);
+            //setsuccesFor(FotoP);
             ok++;
         }
         
@@ -274,6 +375,13 @@ const closeEditProfileModal = (e) => {
              return true;
          }
          
+         
+    });
+    
+     $("#makecomment").submit(function comment() {   
+            
+       alert("Hola");
+       return false;
          
     });
 
@@ -415,6 +523,16 @@ document.addEventListener('click', (e) =>
         closeCommentEditModal();
     }
     
+    if (elementId.toString().includes("EditCloseP")) {
+        
+        closePublicationEditModal();
+    }
+    
+    if (elementId.toString().includes("DeleteClose")) {
+        
+        closePublicationDeleteModal();
+    }
+    
     if (elementId.toString().includes("likeheart")) {
         
         var str = elementId.toString();
@@ -433,6 +551,10 @@ function openPublicationEditModal(btnId) {
     var text="input-text";
     const textoPubli= document.getElementById(text.concat(btnId));
     $("#textoEP").val(textoPubli.value);
+    
+     var HasImage="input-hasImage";
+    const hasImage= document.getElementById(HasImage.concat(btnId));
+    $("#hasImageEP").val(hasImage.value);
     var idImage="input-img";
     const image= document.getElementById(idImage.concat(btnId));
     document.getElementById("imgEP").src="UImgController?id=1000003";
@@ -450,53 +572,37 @@ function openPublicationEditModal(btnId) {
     EditpublicationModal.style.display = 'grid';
 };
 
-const closePublicationEditModal = (e) => {
+function closePublicationEditModal () {
     EditpublicationModal.style.display = 'none';
 };
 
 
-Editpublicationclick.addEventListener('click', openPublicationEditModal);
+//Editpublicationclick.addEventListener('click', openPublicationEditModal);
 
-Editpublicationcerrar.addEventListener('click', closePublicationEditModal);
+//Editpublicationcerrar.addEventListener('click', closePublicationEditModal);
 
 
-function setErrorFor(input, message){
-    const formControl=input.parentElement;//.form-control
-    const small=formControl.querySelector('small');
 
-    if(input===Foto){
-        //add error message inside mall
-        small.innerText=message;
-
-        //add error class
-        formControl.className='form-control error';
-    }else{
-        //add error message inside mall
-        small.innerText=message;
-
-        //add error class
-        formControl.className='form-control error';
-    }
-}
-
-function setSuccesFor(input){
-    const formControl=input.parentElement;
-    formControl.className='form-control success';
-}
 
 $("#form-Editpublication").submit(function publicacion() {
 
 
         var ok=0;
-
-
-        if(EditTexto.value.length<1 && EditFotoP.files.length===0){ //Valida solo incluir letras alfabeto español}
-             alert("vacios edit public");
-            setErrorFor(EditTexto,"El campo no puede estar vacío");
-            setErrorFor(EditFotoP,"El campo no puede estar vacío");
+        
+        const hasImage= document.getElementById("hasImageEP");
+    
+        if(EditTexto.value.length<1 && hasImage.value==="false"){ //Valida solo incluir letras alfabeto español}
+            // alert("La publicacion debe tener al menos texto o una imagen");
+            alertRed.style.display = 'flex';
+            alert("Debe llenar al menos uno de los campos para poder editar la publicación");
+             return false;
+            //setErrorFor(EditTexto,"El campo no puede estar vacío");
+            //setErrorFor(EditFotoP,"El campo no puede estar vacío");
         }else{
-            setSuccesFor(Nombres);
-            setsuccesFor(EditFotoP);
+            alertRed.style.display = 'flex';
+            return true;
+            //setSuccesFor(Nombres);
+           // setsuccesFor(EditFotoP);
             ok++;
         }
 
@@ -508,6 +614,17 @@ $("#form-Editpublication").submit(function publicacion() {
 
 
     });
+    
+    function commentValidation(input){
+        
+        const idInputComment= document.getElementById(input);
+        
+       if(input.value.lenght<1){
+           
+           alert("Hola");
+           
+       }
+    }
 
 //==========================DELETE PUBLICATION=================================
 
@@ -518,7 +635,7 @@ function openPublicationDeleteModal(btnId){
     DeletepublicationModal.style.display = 'grid';
 };
 
-const closePublicationDeleteModal = (e) => {
+function closePublicationDeleteModal() {
     DeletepublicationModal.style.display = 'none';
 };
 
@@ -593,7 +710,7 @@ const CommentEdit= (e) => {
 
 //EditCommentcerrar.addEventListener('click', closeCommentEditModal);
 
-EditComment.addEventListener('click', CommentEdit);
+//EditComment.addEventListener('click', CommentEdit);
 
 //=======================SIDEBAR============================
 //remove active class from all menu items

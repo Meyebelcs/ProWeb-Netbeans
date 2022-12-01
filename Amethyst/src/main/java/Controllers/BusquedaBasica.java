@@ -90,12 +90,15 @@ public class BusquedaBasica extends HttpServlet {
         
         try {
             
-                ArrayList<ConsultaPublicacion> publicaciones= pDAO.search(texto);
+                ArrayList<ConsultaPublicacion> publicaciones= pDAO.search(texto, 1);
                  ArrayList<ConsultaComentario> comentarios = cDAO.getComentarios();
                  ArrayList<MeGusta> meGustas = mDAO.getMeGusta();
                 request.setAttribute("meGustas", meGustas);
-             request.setAttribute("publicaciones", publicaciones);
+                request.setAttribute("publicaciones", publicaciones);
                 request.setAttribute("comentarios", comentarios);
+                request.setAttribute("page", 1);
+                request.setAttribute("section", 4);
+                request.setAttribute("desp", 1);
              request.getRequestDispatcher("/HOME/HOME.jsp").forward(request, response);
              
         } catch (SQLException ex) {

@@ -95,7 +95,7 @@ font-size: 0.9rem;
 }
 
 .btn-primary{
-    background: var(--color-primary);
+    background: red;
     color:white;
 }
 
@@ -276,6 +276,124 @@ position: relative;
     width: 100%;
     text-align: center;
     padding: 1rem 0;
+}
+
+/*VALIDATION EDIT PUBLICATION*/
+.alertRed{
+color: red;
+display:none;
+align-items: center;
+justify-content: center;
+}
+.alertRed-empty{
+    color: red;
+    display:none;
+    align-items: center;
+    justify-content: center;
+}
+.alertRed-invalid-characters{
+    color: red;
+    display:none;
+    align-items: center;
+    justify-content: center;
+}
+.alertRed-invalid-email{
+    color: red;
+    display:none;
+    align-items: center;
+    justify-content: center;
+}
+.alertRed-password-number{
+    color: red;
+    display:none;
+    align-items: center;
+    justify-content: center;
+}
+.alertRed-password-mayus{
+    color: red;
+    display:none;
+    align-items: center;
+    justify-content: center;
+}
+.alertRed-password-minus{
+    color: red;
+    display:none;
+    align-items: center;
+    justify-content: center;
+}
+.alertRed-password-sign{
+    color: red;
+    display:none;
+    align-items: center;
+    justify-content: center;
+}
+.alertRed-password-8{
+    color: red;
+    display:none;
+    align-items: center;
+    justify-content: center;
+} 
+/*-------------VALIDATION ALERTRED--------------*/
+.alertRed{
+color: red;
+display:none;
+align-items: center;
+justify-content: center;
+}
+.alertRed-empty{
+    color: red;
+    display:none;
+    align-items: center;
+    justify-content: center;
+}
+.alertRed-invalid-characters{
+    color: red;
+    display:none;
+    align-items: center;
+    justify-content: center;
+}
+.alertRed-invalid-email{
+    color: red;
+    display:none;
+    align-items: center;
+    justify-content: center;
+}
+.alertRed-password-number{
+    color: red;
+    display:none;
+    align-items: center;
+    justify-content: center;
+}
+.alertRed-password-mayus{
+    color: red;
+    display:none;
+    align-items: center;
+    justify-content: center;
+}
+.alertRed-password-minus{
+    color: red;
+    display:none;
+    align-items: center;
+    justify-content: center;
+}
+.alertRed-password-sign{
+    color: red;
+    display:none;
+    align-items: center;
+    justify-content: center;
+}
+.alertRed-password-8{
+    color: red;
+    display:none;
+    align-items: center;
+    justify-content: center;
+}
+
+.alertRed-password-invalid{
+color: red;
+display:none;
+align-items: center;
+justify-content: center;
 }
 
 /*-------------------NOTIFICATION POPUP--------------*/

@@ -88,6 +88,8 @@ public class UpdateCommentController extends HttpServlet {
             HttpSession session=request.getSession();
             String id=session.getAttribute("id").toString();
             String idPublicacion = request.getParameter("idPubliEC");
+            String page = request.getParameter("pageEC");
+            String section = request.getParameter("sectionEC");
             String idComment = request.getParameter("idCommentEC");
             String texto = request.getParameter("textoEditC");
             String spoiler = request.getParameter("spoilerEC");
@@ -104,21 +106,106 @@ public class UpdateCommentController extends HttpServlet {
             ComentarioDAO cDAO = new ComentarioDAO();
             MeGustaDAO mDAO= new MeGustaDAO();
             
+            int newpage=Integer.parseInt(page);
+            int newpage2=Integer.parseInt(page)+1;
+        
+        if(Integer.parseInt(section)==1){
         try {   
             boolean result = cDAO.editar(comment);
             
             if(result){
-            ArrayList<ConsultaPublicacion> publicaciones = pDAO.getPublicaciones();
+            ArrayList<ConsultaPublicacion> publicaciones = pDAO.getPublicaciones(newpage);
+                ArrayList<ConsultaPublicacion> isDesp = pDAO.getPublicaciones(newpage2);
+                if(isDesp.size()<1){  
+                    request.setAttribute("desp", 0);
+                }else{
+                    request.setAttribute("desp", 1);
+                }
                  ArrayList<ConsultaComentario> comentarios = cDAO.getComentarios();
                  ArrayList<MeGusta> meGustas = mDAO.getMeGusta();
                 request.setAttribute("meGustas", meGustas);
-             request.setAttribute("publicaciones", publicaciones);
-                request.setAttribute("comentarios", comentarios);
-             request.getRequestDispatcher("/HOME/HOME.jsp").forward(request, response);
+                request.setAttribute("publicaciones", publicaciones);
+                request.setAttribute("comentarios", comentarios); 
+                request.setAttribute("page", newpage);
+                request.setAttribute("section", 1);
+                request.getRequestDispatcher("/HOME/HOME.jsp").forward(request, response);
             }
             
         } catch (SQLException ex) {
             Logger.getLogger(UpdateCommentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }else if(Integer.parseInt(section)==2){
+        try {   
+            boolean result = cDAO.editar(comment);
+            
+            if(result){
+            ArrayList<ConsultaPublicacion> publicaciones = pDAO.masComentadas(newpage);
+                ArrayList<ConsultaPublicacion> isDesp = pDAO.masComentadas(newpage2);
+                if(isDesp.size()<1){  
+                    request.setAttribute("desp", 0);
+                }else{
+                    request.setAttribute("desp", 1);
+                }
+                 ArrayList<ConsultaComentario> comentarios = cDAO.getComentarios();
+                 ArrayList<MeGusta> meGustas = mDAO.getMeGusta();
+                request.setAttribute("meGustas", meGustas);
+                request.setAttribute("publicaciones", publicaciones);
+                request.setAttribute("comentarios", comentarios); 
+                request.setAttribute("page", newpage);
+                request.setAttribute("section", 2);
+                request.getRequestDispatcher("/HOME/HOME.jsp").forward(request, response);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(UpdateCommentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }else if(Integer.parseInt(section)==3){
+        try {   
+            boolean result = cDAO.editar(comment);
+            
+            if(result){
+            ArrayList<ConsultaPublicacion> publicaciones = pDAO.masVotadas(newpage);
+                ArrayList<ConsultaPublicacion> isDesp = pDAO.masVotadas(newpage2);
+                if(isDesp.size()<1){  
+                    request.setAttribute("desp", 0);
+                }else{
+                    request.setAttribute("desp", 1);
+                }
+                 ArrayList<ConsultaComentario> comentarios = cDAO.getComentarios();
+                 ArrayList<MeGusta> meGustas = mDAO.getMeGusta();
+                request.setAttribute("meGustas", meGustas);
+                request.setAttribute("publicaciones", publicaciones);
+                request.setAttribute("comentarios", comentarios); 
+                request.setAttribute("page", newpage);
+                request.setAttribute("section", 3);
+                request.getRequestDispatcher("/HOME/HOME.jsp").forward(request, response);
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(UpdateCommentController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }else{
+                   
+            try {
+                boolean result = cDAO.editar(comment);
+
+                if(result){
+                ArrayList<ConsultaPublicacion> publicaciones = pDAO.getPublicaciones(1);
+                     ArrayList<ConsultaComentario> comentarios = cDAO.getComentarios();
+                     ArrayList<MeGusta> meGustas = mDAO.getMeGusta();
+                    request.setAttribute("meGustas", meGustas);
+                    request.setAttribute("publicaciones", publicaciones);
+                    request.setAttribute("comentarios", comentarios);  
+                    request.setAttribute("page", 1);
+                    request.setAttribute("section", 1);
+                    request.setAttribute("desp", 1);
+                 request.getRequestDispatcher("/HOME/HOME.jsp").forward(request, response);
+                }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(UpdatePublicacionControler.class.getName()).log(Level.SEVERE, null, ex);
+            }      
+        
         }
         
         
